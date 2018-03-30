@@ -3,3 +3,5 @@ RayTracer/obj/
 RayTracer/.vs/
 RayTracer/Properties/
 RayTracer/App.config
+RayTracer/bin/
+.vs/RayTracer/v15/.suo
