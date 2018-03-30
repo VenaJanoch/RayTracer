@@ -31,7 +31,7 @@ namespace RayTracer
 
         public override string ToString()
         {
-            return material.ToString() + " "  + point.ToString();
+            return material.ToString() + "\r\n" + point.ToString();
         }
 
     }

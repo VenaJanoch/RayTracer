@@ -19,7 +19,22 @@ namespace RayTracer
         
         public Scene(string input_file)
         {
-            SceneInfoContainer.sceneInputFilePath = input_file;
+            camera = new Camera();
+            fileManipulator = new FileManipulator();
+
+            fileManipulator.loadSceneFromTXT(input_file);
+
+            Console.WriteLine(SceneInfoContainer.toString());
+
+            for(int i = 0; i < SceneInfoContainer.shapeCount; i++)
+            {
+                Console.WriteLine(SceneInfoContainer.shapes[i].ToString());
+            }
+
+
+            Console.ReadLine();
+
+
         }
 
         public Scene()

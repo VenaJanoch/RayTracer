@@ -113,7 +113,7 @@ namespace RayTracer
 
         public override string ToString()
         {
-            return x + " " + y + " " + z; 
+            return x + "\r\n" + y + "\r\n" + z; 
         }
 
 

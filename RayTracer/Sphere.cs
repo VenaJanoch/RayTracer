@@ -37,7 +37,7 @@ namespace RayTracer
 
         public override string ToString()
         {
-            return "s " +  base.ToString()+ " " + radius;
+            return "s\r\n" +  base.ToString()+ "\r\n" + radius + "\r\n";
         }
     }
 }

@@ -49,5 +49,37 @@ namespace RayTracer
                    indirectLightSamples + "\r\n" +
                    maxDepth + "\r\n";
         }
+
+        public static void clearContainer()
+        {
+                       
+            shapes = null;
+
+            lights = null;
+
+            sceneOutputFilePath = "";
+
+            sceneInputFilePath = "";
+
+            imageOutputFilePath = "";
+
+            screenWidth = 0;
+
+            screenHeight = 0;
+
+            superSamples = 0;
+
+            shapeCount = 0;
+
+            lightCount = 0;
+
+            lightSamples = 0;
+
+            indirectLightSamples = 0;
+
+            maxDepth = 0;
+
+
     }
+}
 }
