@@ -65,13 +65,13 @@ namespace RayTracer
 
             for (int i = 0; i < SceneInfoContainer.lightCount ; ++i)
             {
-                if (random.Next(2) == 0)
-                {
+               // if (random.Next(2) == 0)
+              //  {
                     Sphere sphere = new Sphere(new Material(Vector.RandomColor),
                         new Vector(0.0, 1.0, 0.0) + Vector.RandomPointInSphere(SceneInfoContainer.radius),
                         0.5 + random.NextDouble());
                     SceneInfoContainer.lights[i] = new Light(sphere);
-                }
+               // }
                /* else
                 {
                     Cuboid cuboid = new Cuboid(new Material(Vector3.RandomColor),
@@ -83,7 +83,7 @@ namespace RayTracer
             }
 
 
-            fileManipulator.saveSceneToTXT();
+            fileManipulator.SaveSceneToTXT();
 
         }
 

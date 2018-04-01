@@ -18,5 +18,10 @@ namespace RayTracer
 
         public Shape Shape { get { return this.shape; } }
 
+        public override string ToString()
+        {
+            return "l\r\n" + this.shape.ToString() ;
+        }
+
     }
 }
