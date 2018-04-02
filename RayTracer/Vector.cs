@@ -9,9 +9,9 @@ namespace RayTracer
 {
     public class Vector
     {
-        public double x { get; set; }
-        public double y { get; set; }
-        public double z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
         private static ThreadLocal<Random> random =
             new ThreadLocal<Random>(() => new Random());
@@ -20,23 +20,23 @@ namespace RayTracer
 
         public Vector()
         {
-            this.x = 0.0;
-            this.y = 0.0;
-            this.z = 0.0;
+            this.X = 0.0;
+            this.Y = 0.0;
+            this.Z = 0.0;
         }
 
         public Vector(double x, double y, double z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
         }
 
         public Vector(Vector v)
         {
-            this.x = v.x;
-            this.y = v.y;
-            this.z = v.z;
+            this.X = v.X;
+            this.Y = v.Y;
+            this.Z = v.Z;
         }
 
 
@@ -65,7 +65,7 @@ namespace RayTracer
             get
             {
                 double lenRecip = 1.0 / this.Length;
-                return new Vector(this.x * lenRecip, this.y * lenRecip, this.z * lenRecip);
+                return new Vector(this.X * lenRecip, this.Y * lenRecip, this.Z * lenRecip);
             }
         }
 
@@ -73,7 +73,7 @@ namespace RayTracer
         {
             get
             {
-                return (this.x * this.x) + (this.y * this.y) + (this.z * this.z);
+                return (this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z);
             }
         }
 
@@ -88,32 +88,86 @@ namespace RayTracer
 
         public static Vector operator +(Vector v1, Vector v2)
         {
-            return new Vector(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+            return new Vector(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
         public static Vector operator -(Vector v1, Vector v2)
         {
-            return new Vector(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+            return new Vector(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
         public static Vector operator -(Vector v)
         {
-            return new Vector(-v.x, -v.y, -v.z);
+            return new Vector(-v.X, -v.Y, -v.Z);
         }
 
         public static Vector operator *(Vector v1, double m)
         {
-            return new Vector(v1.x * m, v1.y * m, v1.z * m);
+            return new Vector(v1.X * m, v1.Y * m, v1.Z * m);
         }
 
         public static Vector operator *(Vector v1, Vector v2)
         {
-            return new Vector(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+            return new Vector(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
+        }
+
+        public double Dot(Vector v)
+        {
+            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
+        }
+
+        public Vector Cross(Vector v)
+        {
+            return new Vector(
+                (this.Y * v.Z) - (v.Y * this.Z),
+                (v.X * this.Z) - (this.X * v.Z),
+                (this.X * v.Y) - (v.X * this.Y));
+        }
+
+        public static Vector RandomHemisphereDirection(Vector normal)
+        {
+            Vector direction = new Vector(
+                (2.0 * random.Value.NextDouble()) - 1.0,
+                (2.0 * random.Value.NextDouble()) - 1.0,
+                (2.0 * random.Value.NextDouble()) - 1.0).Normalized;
+            return (direction.Dot(normal) > 0.0) ? direction : -direction;
+        }
+
+        public Vector Clamped(double low, double high)
+        {
+            return new Vector(
+                (X > high) ? high : ((X < low) ? low : X),
+                (Y > high) ? high : ((Y < low) ? low : Y),
+                (Z > high) ? high : ((Z < low) ? low : Z));
+        }
+
+        public int toARGB()
+        {
+            byte a = 255;
+            byte r = (byte)(this.X * 255.0);
+            byte g = (byte)(this.Y * 255.0);
+            byte b = (byte)(this.Z * 255.0);
+            return (a << 24) | (r << 16) | (g << 8) | b;
+        }
+        public Vector Reflected(Vector normal)
+        {
+            return (normal * (2.0 * this.Dot(normal))) - this;
+        }
+
+
+        public Vector Clamped()
+        {
+            return this.Clamped(0.0, 1.0);
+        }
+
+        public Vector Lerp(Vector v, double percent)
+        {
+            return this + ((v - this) * percent);
         }
 
         public override string ToString()
         {
-            return x + "\r\n" + y + "\r\n" + z; 
+            return X + "\r\n" + Y + "\r\n" + Z; 
         }
 
 

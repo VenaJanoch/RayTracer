@@ -20,7 +20,7 @@ namespace RayTracer
 
         public override string ToString()
         {
-            return "l\r\n" + this.shape.ToString() ;
+            return "l\r\n" + shape.ToString() ;
         }
 
     }

@@ -8,16 +8,16 @@ namespace RayTracer
 {
     public class Material
     {
-        public Vector color { get; }
+        public Vector Color { get; }
         
         public Material(Vector color)
         {
-            this.color = color;
+            Color = color;
         }
 
         public override string ToString()
         {
-            return  color.ToString() ;
+            return  Color.ToString() ;
         }
     }
 
