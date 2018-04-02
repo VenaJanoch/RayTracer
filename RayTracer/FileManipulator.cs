@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
+
+
     public class FileManipulator
     {
+        private StreamWriter FileWriter;
         
         public void SaveSceneToTXT()
         {
@@ -72,6 +76,8 @@ namespace RayTracer
             ReadLights(file);
 
             file.Close();
+
+            FileWriter = new StreamWriter(SceneInfoContainer.imageOutputFilePath);
         }
 
         private void ReadLights(StreamReader file)
@@ -164,8 +170,7 @@ namespace RayTracer
 
             return output;
         }
-
-
+    
         private string textReadLine(System.IO.StreamReader file)
         {
             string output = "";
@@ -178,5 +183,23 @@ namespace RayTracer
 
             return null;
         }
+
+        public void SaveImgToTXT(int y, Color color)
+        {
+
+            if(y != SceneInfoContainer.screenWidth)
+            {
+                FileWriter.Write(color.ToString() + " ");
+            }
+            else
+            {
+
+                FileWriter.Write(color.ToString() + "\r\n");
+            }
+           
+
+
+        }
+
     }
 }
