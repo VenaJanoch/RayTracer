@@ -137,6 +137,13 @@ namespace RayTracer
         {
             return new Vector(X + v.X, Y + v.Y, Z + v.Z);
         }
+        public static Vector RandomPointInCuboid(double width, double height, double depth)
+        {
+            return new Vector(
+                width * ((2.0 * random.Value.NextDouble()) - 1.0),
+                height * ((2.0 * random.Value.NextDouble()) - 1.0),
+                depth * ((2.0 * random.Value.NextDouble()) - 1.0));
+        }
 
         public static Vector RandomHemisphereDirection(Vector normal)
         {
