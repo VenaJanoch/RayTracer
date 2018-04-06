@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -49,6 +50,14 @@ namespace RayTracer
                     random.Value.NextDouble(),
                     random.Value.NextDouble());
             }
+        }
+
+        public int Brightness(Color c)
+        {
+            return (int)Math.Sqrt(
+               c.R * c.R * .241 +
+               c.G * c.G * .691 +
+               c.B * c.B * .068);
         }
 
         public static Vector RandomPointInSphere(double radius)
@@ -124,6 +133,11 @@ namespace RayTracer
                 (this.X * v.Y) - (v.X * this.Y));
         }
 
+        public Vector Add(Vector v)
+        {
+            return new Vector(X + v.X, Y + v.Y, Z + v.Z);
+        }
+
         public static Vector RandomHemisphereDirection(Vector normal)
         {
             Vector direction = new Vector(
@@ -163,6 +177,11 @@ namespace RayTracer
         public Vector Lerp(Vector v, double percent)
         {
             return this + ((v - this) * percent);
+        }
+
+        public Vector Mult(double scalar)
+        {
+            return new Vector(X * scalar, Y * scalar, Z * scalar);
         }
 
         public override string ToString()
