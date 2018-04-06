@@ -93,7 +93,7 @@ namespace RayTracer
                 {
                     if (textReadLine(file).Contains("s"))
                     {
-                        Shape tmpShape = ProcessShapeBodyTXT(file);
+                        Shape tmpShape = ProcessSphereBodyTXT(file);
                         if(tmpShape != null)
                         {
                         SceneInfoContainer.lights[i] = new Light(tmpShape);
@@ -126,7 +126,15 @@ namespace RayTracer
               
                 if (tmp.Contains("s"))
                 {
-                    SceneInfoContainer.shapes[i] = ProcessShapeBodyTXT(file);
+                    SceneInfoContainer.shapes[i] = ProcessSphereBodyTXT(file);
+                }
+                else if (tmp.Contains("c"))
+                {
+                    SceneInfoContainer.shapes[i] = ProcessCuboidBodyTXT(file);
+                }
+                else if (tmp.Contains("p"))
+                {
+                     SceneInfoContainer.shapes[i] = ProcessPlaneBodyTXT(file);
                 }
                 else
                 {
@@ -138,7 +146,49 @@ namespace RayTracer
             }
         }
 
-        public Shape ProcessShapeBodyTXT(StreamReader file)
+
+        public Shape ProcessPlaneBodyTXT(StreamReader file)
+        {
+
+            double x, y, z, r, g, b, width, height, dept;
+
+            r = TextReadNumber(file);
+            g = TextReadNumber(file);
+            b = TextReadNumber(file);
+
+            x = TextReadNumber(file);
+            y = TextReadNumber(file);
+            z = TextReadNumber(file);
+
+            dept = TextReadNumber(file);
+           
+
+            Plane tmpPlane = new Plane(new Material(new Vector(r, g, b)), new Vector(x, y, z), dept);
+            return tmpPlane;
+        }
+
+        public Shape ProcessCuboidBodyTXT(StreamReader file)
+        {
+
+            double x, y, z, r, g, b, width, height, dept;
+
+            r = TextReadNumber(file);
+            g = TextReadNumber(file);
+            b = TextReadNumber(file);
+
+            x = TextReadNumber(file);
+            y = TextReadNumber(file);
+            z = TextReadNumber(file);
+
+            width = TextReadNumber(file);
+            height = TextReadNumber(file);
+            dept = TextReadNumber(file);
+
+            Cuboid tmpCuboid = new Cuboid(new Material(new Vector(r, g, b)), new Vector(x, y, z), width, height, dept);
+            return tmpCuboid;
+        }
+
+        public Shape ProcessSphereBodyTXT(StreamReader file)
         {
 
             double x, y,z,r,g,b, radius;

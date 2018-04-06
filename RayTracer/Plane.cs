@@ -37,6 +37,12 @@ namespace RayTracer
             return new Intersection(t, point, this.point, material);
 
         }
+
+        public override string ToString()
+        {
+            return "p\r\n" + base.ToString() + "\r\n" + Distance + "\r\n";
+        }
+
     }
 
 }

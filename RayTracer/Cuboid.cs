@@ -9,16 +9,16 @@ namespace RayTracer
    public class Cuboid : Shape
     {
 
-        public double width { get; set; }
-        public double height { get; set; }
-        public double depth { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double Depth { get; set; }
 
         public Cuboid(Material material, Vector point, double width, double height, double depth)
             : base(material, point)
         {
-            this.width = width;
-            this.height = height;
-            this.depth = depth;
+            this.Width = width;
+            this.Height = height;
+            this.Depth = depth;
         }
 
         public override Vector RandomPoint
@@ -26,7 +26,7 @@ namespace RayTracer
             get
             {
                 return this.point +
-                    Vector.RandomPointInCuboid(width, height, depth);
+                    Vector.RandomPointInCuboid(Width, Height, Depth);
             }
         }
 
@@ -34,17 +34,17 @@ namespace RayTracer
         {
             double nMinX, nMinY, nMinZ, nMaxX, nMaxY, nMaxZ;
             double tMin, tMax;
-            double tX1 = (-this.width + this.point.X - ray.Point.X) / ray.Direction.X;
-            double tX2 = (this.width + this.point.X - ray.Point.X) / ray.Direction.X;
+            double tX1 = (-Width + this.point.X - ray.Point.X) / ray.Direction.X;
+            double tX2 = (Width + this.point.X - ray.Point.X) / ray.Direction.X;
 
             if (tX1 < tX2)
             {
                 tMin = tX1;
                 tMax = tX2;
-                nMinX = -this.width;
+                nMinX = -Width;
                 nMinY = 0.0;
                 nMinZ = 0.0;
-                nMaxX = this.width;
+                nMaxX = Width;
                 nMaxY = 0.0;
                 nMaxZ = 0.0;
             }
@@ -52,10 +52,10 @@ namespace RayTracer
             {
                 tMin = tX2;
                 tMax = tX1;
-                nMinX = this.width;
+                nMinX = Width;
                 nMinY = 0.0;
                 nMinZ = 0.0;
-                nMaxX = -this.width;
+                nMaxX = -Width;
                 nMaxY = 0.0;
                 nMaxZ = 0.0;
             }
@@ -65,8 +65,8 @@ namespace RayTracer
                 return new Intersection();
             }
 
-            double tY1 = (-this.height + this.point.Y - ray.Point.Y) / ray.Direction.Y;
-            double tY2 = (this.height + this.point.Y - ray.Point.Y) / ray.Direction.Y;
+            double tY1 = (-Height + this.point.Y - ray.Point.Y) / ray.Direction.Y;
+            double tY2 = (Height + this.point.Y - ray.Point.Y) / ray.Direction.Y;
 
             if (tY1 < tY2)
             {
@@ -74,14 +74,14 @@ namespace RayTracer
                 {
                     tMin = tY1;
                     nMinX = 0.0;
-                    nMinY = -this.height;
+                    nMinY = -Height;
                     nMinZ = 0.0;
                 }
                 if (tY2 < tMax)
                 {
                     tMax = tY2;
                     nMaxX = 0.0;
-                    nMaxY = this.height;
+                    nMaxY = Height;
                     nMaxZ = 0.0;
                 }
             }
@@ -91,14 +91,14 @@ namespace RayTracer
                 {
                     tMin = tY2;
                     nMinX = 0.0;
-                    nMinY = this.height;
+                    nMinY = Height;
                     nMinZ = 0.0;
                 }
                 if (tY1 < tMax)
                 {
                     tMax = tY1;
                     nMaxX = 0.0;
-                    nMaxY = -this.height;
+                    nMaxY = -Height;
                     nMaxZ = 0.0;
                 }
             }
@@ -108,8 +108,8 @@ namespace RayTracer
                 return new Intersection();
             }
 
-            double tZ1 = (-this.depth + this.point.Z - ray.Point.Z) / ray.Direction.Z;
-            double tZ2 = (this.depth + this.point.Z - ray.Point.Z) / ray.Direction.Z;
+            double tZ1 = (-Depth + this.point.Z - ray.Point.Z) / ray.Direction.Z;
+            double tZ2 = (Depth + this.point.Z - ray.Point.Z) / ray.Direction.Z;
 
             if (tZ1 < tZ2)
             {
@@ -118,14 +118,14 @@ namespace RayTracer
                     tMin = tZ1;
                     nMinX = 0.0;
                     nMinY = 0.0;
-                    nMinZ = -this.depth;
+                    nMinZ = -Depth;
                 }
                 if (tZ2 < tMax)
                 {
                     tMax = tZ2;
                     nMaxX = 0.0;
                     nMaxY = 0.0;
-                    nMaxZ = this.depth;
+                    nMaxZ = Depth;
                 }
             }
             else
@@ -135,14 +135,14 @@ namespace RayTracer
                     tMin = tZ2;
                     nMinX = 0.0;
                     nMinY = 0.0;
-                    nMinZ = this.depth;
+                    nMinZ = Depth;
                 }
                 if (tZ1 < tMax)
                 {
                     tMax = tZ1;
                     nMaxX = 0.0;
                     nMaxY = 0.0;
-                    nMaxZ = -this.depth;
+                    nMaxZ = -Depth;
                 }
             }
 
@@ -171,6 +171,12 @@ namespace RayTracer
                 return new Intersection();
             }
         }
+
+        public override string ToString()
+        {
+            return "c\r\n" + base.ToString() + "\r\n" + Width + "\r\n" + Height + "\r\n" + Depth + "\r\n";
+        }
+
 
     }
 }
