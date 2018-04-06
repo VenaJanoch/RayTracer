@@ -12,8 +12,8 @@ namespace RayTracer
 
     public class FileManipulator
     {
-        private StreamWriter FileWriter;
-        
+        public StreamWriter FileWriter { get; set; }        
+
         public void SaveSceneToTXT()
         {
             string outputText = SceneInfoContainer.toString();
@@ -38,7 +38,8 @@ namespace RayTracer
                 }
             }
 
-            System.IO.File.WriteAllText(SceneInfoContainer.sceneOutputFilePath, outputText);
+            File.WriteAllText(SceneInfoContainer.sceneOutputFilePath, outputText);
+
 
 
         }
@@ -49,7 +50,7 @@ namespace RayTracer
 
             SceneInfoContainer.sceneInputFilePath = inputFile;
          
-            System.IO.StreamReader file = new System.IO.StreamReader(inputFile);
+            StreamReader file = new System.IO.StreamReader(inputFile);
 
             SceneInfoContainer.sceneOutputFilePath = textReadLine(file);
 
@@ -140,7 +141,7 @@ namespace RayTracer
         public Shape ProcessShapeBodyTXT(StreamReader file)
         {
 
-            double x, y,z,r,g,b;
+            double x, y,z,r,g,b, radius;
 
             r = TextReadNumber(file);
             g = TextReadNumber(file);
@@ -150,9 +151,9 @@ namespace RayTracer
             y = TextReadNumber(file);
             z = TextReadNumber(file);
 
-            textReadLine(file);
+            radius = TextReadNumber(file);
 
-            Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), SceneInfoContainer.radius);
+            Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), radius);
             return tmpSphere;
         }
       
@@ -184,7 +185,7 @@ namespace RayTracer
             return null;
         }
 
-        public void SaveImgToTXT(int y, Color color)
+        public void SaveImgToTXT(int y, int color)
         {
 
             if(y != SceneInfoContainer.screenWidth)
@@ -196,8 +197,8 @@ namespace RayTracer
 
                 FileWriter.Write(color.ToString() + "\r\n");
             }
-           
 
+            
 
         }
 
