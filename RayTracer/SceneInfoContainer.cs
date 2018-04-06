@@ -8,7 +8,7 @@ namespace RayTracer
 {
     class SceneInfoContainer
     {
-        public const double radius = 10.0;
+        public const double radius = 3.0;
 
         public static Shape[] shapes;
         public static Light[] lights;

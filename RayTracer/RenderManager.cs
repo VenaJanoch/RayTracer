@@ -53,12 +53,12 @@ namespace RayTracer
                     }
 
                     color = color * superSamplesSquaredRecip;
+
                     Color colorARGB = Color.FromArgb(color.toARGB());
                     lock (obj)
                     {
                         image.SetPixel(x, y, colorARGB); 
-                        // Console.WriteLine(colorARGB.);
-                        fileManipulator.SaveImgToTXT(y, colorARGB);
+                        fileManipulator.SaveImgToTXT(y, color.Brightness(colorARGB) );
                         
                     }
                 }

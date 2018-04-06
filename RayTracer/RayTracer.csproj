@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Cuboid.cs" />
     <Compile Include="FileManipulator.cs" />
     <Compile Include="Intersection.cs" />
     <Compile Include="Light.cs" />

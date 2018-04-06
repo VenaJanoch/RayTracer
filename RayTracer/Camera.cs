@@ -38,10 +38,10 @@ namespace RayTracer
         
         public Ray ImageRay(double xx, double yy)
         {
-            Vector rightComp = this.right * ((2.0 * xx) - 1.0);
-            Vector upComp = this.up * ((2.0 * yy) - 1.0);
-            Vector direction = (this.forward + rightComp - upComp).Normalized;
-            return new Ray(this.eye, direction, Ray.InitialDepth);
+            Vector rightComp = right * ((2.0 * xx) - 1.0);
+            Vector upComp = up * ((2.0 * yy) - 1.0);
+            Vector direction = (forward + rightComp - upComp).Normalized;
+            return new Ray(eye, direction, Ray.InitialDepth);
         }
     }
 }

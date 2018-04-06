@@ -22,9 +22,9 @@ namespace RayTracer
             this.point = point;
         }
 
-        public Material Material { get { return this.material; } }
+        public Material Material { get { return material; } }
 
-        public Vector Point { get { return this.point; } }
+        public Vector Point { get { return point; } }
         
 
         public abstract Intersection Intersect(Ray ray);
