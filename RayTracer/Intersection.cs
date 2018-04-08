@@ -11,7 +11,7 @@ namespace RayTracer
         public double T { get; }
         public Vector Point { get; }
         public Vector Normal { get; }
-       public Material Material { get; }
+        public Material Material { get; }
 
         public const double MaxT = 1.0e30;
 

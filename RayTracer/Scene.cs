@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace RayTracer
 {
 
-    class Scene
+   public class Scene
     {
         
         private Camera camera;
@@ -19,70 +19,116 @@ namespace RayTracer
         private const double AmbientLight = 0.60;
         private const double Reflectivity = 0.30;
 
+
+        public const double radius = 10.0;
+
+        public Shape[] shapes { get; set; }
+        public Light[] lights { get; set; } 
+
+        public string sceneOutputFilePath { get; set; }
+        public string sceneInputFilePath { get; set; }
+        public string imageOutputFilePath { get; set; }
+        public int screenWidth { get; set; }
+        public int screenHeight { get; set; }
+        public int superSamples { get; set; }
+        public int shapeCount { get; set; }
+        public int lightCount { get; set; }
+        public int lightSamples { get; set; }
+        public int indirectLightSamples { get; set; }
+        public int maxDepth { get; set; }      
+
         public Scene(string input_file)
         {
-            
-            fileManipulator = new FileManipulator();
+            sceneInputFilePath = input_file;
+            fileManipulator = new FileManipulator(this);
 
             fileManipulator.loadSceneFromTXT(input_file);
 
-            Console.WriteLine(SceneInfoContainer.toString());
+            double aspect = (double)(screenWidth / screenHeight);
 
-            for(int i = 0; i < SceneInfoContainer.shapeCount; i++)
-            {
-                Console.WriteLine(SceneInfoContainer.shapes[i].ToString());
-            }
-
-            
-            double aspect = (double)(SceneInfoContainer.screenWidth / SceneInfoContainer.screenHeight);
             camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
 
             RenderManager = new RenderManager(this, camera, fileManipulator);
 
-            RenderManager.RenderingPicture();
+            RenderManager.RenderingPicture(screenWidth, screenHeight, superSamples);
 
             fileManipulator.FileWriter.Close();
         }
 
-        public Scene()
+        public Scene(string sceneOutputFilePath, string imageOutputFilePath,
+            int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples,
+            int indirectLightSamples, int maxDepth)
         {
-            fileManipulator = new FileManipulator();
+
+            this.sceneOutputFilePath = sceneOutputFilePath;
+            this.imageOutputFilePath = imageOutputFilePath;
+            this.screenWidth = screenWidth;
+            this.screenHeight =  screenHeight;
+            this.superSamples = superSamples;
+            this.shapeCount = shapeCount;
+            this.lightCount = lightCount;
+            this.lightSamples = lightSamples;
+            this.indirectLightSamples = indirectLightSamples;
+            this.maxDepth = maxDepth;
+
+            fileManipulator = new FileManipulator(this);
 
             Random random = new Random();
 
-            SceneInfoContainer.shapes = new Shape[SceneInfoContainer.shapeCount];
-            double width, height, depth;
-            for (int i = 0; i < SceneInfoContainer.shapeCount; ++i)
+            CreateShapes(random);
+            CreateLights(random);
+
+            fileManipulator.SaveSceneToTXT();
+
+        }
+
+        private void CreateLights(Random random)
+        {
+            lights = new Light[lightCount];
+
+            for (int i = 0; i < lightCount; ++i)
             {
-                if (random.Next(2) == 0)
+                Sphere sphere = new Sphere(new Material(Vector.RandomColor),
+       new Vector(0.0, 1.0, 0.0) + Vector.RandomPointInSphere(radius),
+       0.5 + random.NextDouble());
+                lights[i] = new Light(sphere);
+            }
+        }
+
+        private void CreateShapes(Random random)
+        {
+            shapes = new Shape[shapeCount];
+
+            double width, height, depth;
+            int randInt = 0;
+            for (int i = 0; i < shapeCount; ++i)
+            {
+                randInt = random.Next(2);
+
+                if ( randInt == 0)
                 {
-                    SceneInfoContainer.shapes[i] = new Sphere(new Material(Vector.RandomColor),
-                        Vector.RandomPointInSphere(SceneInfoContainer.radius), 0.5 + random.NextDouble());
+                    shapes[i] = new Sphere(new Material(Vector.RandomColor),
+                        Vector.RandomPointInSphere(radius), 0.5 + random.NextDouble());
                 }
-                else
+                else if(randInt == 1)
                 {
 
                     width = 0.5 + random.NextDouble();
                     height = 0.5 + random.NextDouble();
                     depth = 0.5 + random.NextDouble();
 
-                    SceneInfoContainer.shapes[i] = new Cuboid(new Material(Vector.RandomColor),
-                        Vector.RandomPointInCuboid(width,height,depth), width,
+                    shapes[i] = new Cuboid(new Material(Vector.RandomColor),
+                        Vector.RandomPointInCuboid(width, height, depth), width,
                         height, depth);
                 }
+                /*else
+                {
+                    depth = 0.5 + random.NextDouble();
+
+                    shapes[i] = new Plane(new Material(Vector.RandomColor),
+                        Vector.RandomPointInPlane(depth), depth);
+                }*/
             }
-
-            SceneInfoContainer.lights = new Light[SceneInfoContainer.lightCount];
-
-            for (int i = 0; i < SceneInfoContainer.lightCount ; ++i)
-            {                    Sphere sphere = new Sphere(new Material(Vector.RandomColor),
-                        new Vector(0.0, 1.0, 0.0) + Vector.RandomPointInSphere(SceneInfoContainer.radius),
-                        0.5 + random.NextDouble());
-                    SceneInfoContainer.lights[i] = new Light(sphere);
-            }
-
-            fileManipulator.SaveSceneToTXT();
-
         }
 
         public Vector RayTrace(Ray ray)
@@ -92,7 +138,7 @@ namespace RayTracer
 
             if (nearestShape.T < nearestLight.T)
             {
-                return this.PhongAt(nearestShape, ray);
+                return PhongAt(nearestShape, ray);
             }
             else if (nearestLight.T < Intersection.MaxT)
             {
@@ -100,7 +146,7 @@ namespace RayTracer
             }
             else
             {
-                return this.BackgroundColor(ray.Direction);
+                return BackgroundColor(ray.Direction);
             }
         }
 
@@ -117,7 +163,7 @@ namespace RayTracer
         private double AmbientPercent(Vector point, Vector normal)
         {
             int unoccludedRays = 0;
-            for (int n = 0; n < SceneInfoContainer.lightSamples; ++n)
+            for (int n = 0; n < lightSamples; ++n)
             {
                 Vector hemisphereDir = Vector.RandomHemisphereDirection(normal);
                 Ray hemisphereRay = new Ray(point, hemisphereDir, Ray.InitialDepth);
@@ -128,7 +174,7 @@ namespace RayTracer
                 }
             }
 
-            return ((double)unoccludedRays / SceneInfoContainer.lightSamples) * AmbientLight;
+            return ((double)unoccludedRays / lightSamples) * AmbientLight;
         }
 
         private Vector PhongAt(Intersection intersection, Ray ray)
@@ -140,21 +186,21 @@ namespace RayTracer
             Vector localNormalEpsPoint = intersection.Point + localNormalEps;
 
             Vector materialColor = intersection.Material.Color;
-            Vector ambientColor = (materialColor * this.BackgroundColor(ray.Direction)) *
-                this.AmbientPercent(localNormalEpsPoint, localNormal);
+            Vector ambientColor = (materialColor * BackgroundColor(ray.Direction)) *
+                AmbientPercent(localNormalEpsPoint, localNormal);
 
             Vector totalColor = ambientColor;
 
-            foreach (Light light in SceneInfoContainer.lights)
+            foreach (Light light in lights)
             {
                 Vector diffuseColorSum = new Vector();
 
-                for (int n = 0; n < SceneInfoContainer.lightSamples; ++n)
+                for (int n = 0; n < lightSamples; ++n)
                 {
                     Vector lightDir = (light.Shape.RandomPoint - intersection.Point).Normalized;
                     Ray lightRay = new Ray(localNormalEpsPoint, lightDir, Ray.InitialDepth);
                     Intersection lightTry = light.Shape.Intersect(lightRay);
-                    Intersection shadowTry = this.NearestShape(lightRay);
+                    Intersection shadowTry = NearestShape(lightRay);
 
                     if (lightTry.T < shadowTry.T)
                     {
@@ -165,14 +211,14 @@ namespace RayTracer
                     }
                 }
 
-                totalColor = totalColor + (diffuseColorSum * (1.0 / SceneInfoContainer.lightSamples));
+                totalColor = totalColor + (diffuseColorSum * (1.0 / lightSamples));
             }
 
-            if (ray.Depth < SceneInfoContainer.maxDepth)
+            if (ray.Depth < maxDepth)
             {
                 Vector reflectDir = viewVector.Reflected(localNormal).Normalized;
                 Ray reflectRay = new Ray(localNormalEpsPoint, reflectDir, ray.Depth + 1);
-                Vector reflectColor = this.RayTrace(reflectRay) * Reflectivity;
+                Vector reflectColor = RayTrace(reflectRay) * Reflectivity;
                 totalColor = totalColor + reflectColor;
             }
 
@@ -184,7 +230,7 @@ namespace RayTracer
         {
             Intersection nearestHit = new Intersection();
 
-            foreach (Shape shape in SceneInfoContainer.shapes)
+            foreach (Shape shape in shapes)
             {
                 Intersection currentTry = shape.Intersect(ray);
 
@@ -201,7 +247,7 @@ namespace RayTracer
         {
             Intersection nearestHit = new Intersection();
 
-            foreach (Light light in SceneInfoContainer.lights)
+            foreach (Light light in lights)
             {
                 Intersection currentTry = light.Shape.Intersect(ray);
 
@@ -213,5 +259,53 @@ namespace RayTracer
             return nearestHit;
         }
 
+        public string GetInfo()
+        {
+            return sceneOutputFilePath + "\r\n" +
+                   imageOutputFilePath + "\r\n" +
+                   screenWidth + "\r\n" +
+                   screenHeight + "\r\n" +
+                   superSamples + "\r\n" +
+                   shapeCount + "\r\n" +
+                   lightCount + "\r\n" +
+                   lightSamples + "\r\n" +
+                   indirectLightSamples + "\r\n" +
+                   maxDepth + "\r\n";
+        }
+
+        public void ClearScene()
+        {
+
+            shapes = null;
+
+            lights = null;
+
+            sceneOutputFilePath = "";
+
+            sceneInputFilePath = "";
+
+            imageOutputFilePath = "";
+
+            screenWidth = 0;
+
+            screenHeight = 0;
+
+            superSamples = 0;
+
+            shapeCount = 0;
+
+            lightCount = 0;
+
+            lightSamples = 0;
+
+            indirectLightSamples = 0;
+
+            maxDepth = 0;
+
+
+        }
+
+
     }
+    
 }

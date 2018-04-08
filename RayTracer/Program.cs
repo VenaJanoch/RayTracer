@@ -45,41 +45,39 @@ namespace RayTracer
         {
             
             Console.WriteLine("Scene output file name/path");
-
-            SceneInfoContainer.sceneOutputFilePath = Console.ReadLine();
-
-            Console.WriteLine(SceneInfoContainer.sceneOutputFilePath);
-
+            string sceneOutputFilePath = Console.ReadLine();
+                      
             Console.WriteLine("Image output file name/path");
-
-            SceneInfoContainer.imageOutputFilePath = Console.ReadLine();
+            string imageOutputFilePath = Console.ReadLine();
 
             Console.Write("Scene width (i.e., 1-3840): ");
-            SceneInfoContainer.screenWidth = Int32.Parse(Console.ReadLine());
+            int screenWidth = Int32.Parse(Console.ReadLine());
          
             Console.Write("Scene height (i.e., 1-3840): ");
-            SceneInfoContainer.screenHeight = Int32.Parse(Console.ReadLine());
+            int screenHeight = Int32.Parse(Console.ReadLine());
 
             Console.Write("Super samples (i.e., 1-8): ");
-            SceneInfoContainer.superSamples = Int32.Parse(Console.ReadLine());
+            int superSamples = Int32.Parse(Console.ReadLine());
 
             Console.Write("Shape count (i.e., 1-200): ");
-            SceneInfoContainer.shapeCount = Int32.Parse(Console.ReadLine());
+            int shapeCount = Int32.Parse(Console.ReadLine());
 
             Console.Write("Light count (i.e., 1-5): ");
-            SceneInfoContainer.lightCount = Int32.Parse(Console.ReadLine());
+            int lightCount = Int32.Parse(Console.ReadLine());
 
             Console.Write("Light samples (i.e., 1-128): ");
-            SceneInfoContainer.lightSamples = Int32.Parse(Console.ReadLine());
+            int lightSamples = Int32.Parse(Console.ReadLine());
 
             Console.Write("Indirect light samples (i.e., 1-128): ");
-            SceneInfoContainer.indirectLightSamples = Int32.Parse(Console.ReadLine());
+            int indirectLightSamples = Int32.Parse(Console.ReadLine());
 
             Console.Write("Max recursion depth (i.e., 0-10): ");
-            SceneInfoContainer.maxDepth = Int32.Parse(Console.ReadLine());
+            int maxDepth = Int32.Parse(Console.ReadLine());
 
 
-            scene = new Scene();
+            scene = new Scene(sceneOutputFilePath, imageOutputFilePath,
+            screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
+            indirectLightSamples, maxDepth);
 
 
         }

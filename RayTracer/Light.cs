@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
-    class Light
+    public class Light
     {
 
         private Shape shape;

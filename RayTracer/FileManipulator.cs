@@ -12,33 +12,39 @@ namespace RayTracer
 
     public class FileManipulator
     {
-        public StreamWriter FileWriter { get; set; }        
+        public StreamWriter FileWriter { get; set; }
+        private Scene scene { get; set; }
+
+        public FileManipulator(Scene scene)
+        {
+            this.scene = scene;
+        }
 
         public void SaveSceneToTXT()
         {
-            string outputText = SceneInfoContainer.toString();
+            string outputText = scene.GetInfo();
 
-            if (SceneInfoContainer.shapes != null)
+            if (scene.shapes != null)
             {
 
-                for (int i = 0; i < SceneInfoContainer.shapeCount; i++)
+                for (int i = 0; i < scene.shapeCount; i++)
                 {
-                    outputText += SceneInfoContainer.shapes[i].ToString();
+                    outputText += scene.shapes[i].ToString();
 
                 }
             }
 
-            if (SceneInfoContainer.lights != null)
+            if (scene.lights != null)
             {
 
-                for (int i = 0; i < SceneInfoContainer.lightCount; i++)
+                for (int i = 0; i < scene.lightCount; i++)
                 {
-                    outputText += SceneInfoContainer.lights[i].ToString();
+                    outputText += scene.lights[i].ToString();
 
                 }
             }
 
-            File.WriteAllText(SceneInfoContainer.sceneOutputFilePath, outputText);
+            File.WriteAllText(scene.sceneOutputFilePath, outputText);
 
 
 
@@ -46,31 +52,31 @@ namespace RayTracer
 
         public void loadSceneFromTXT(string inputFile)
         {
-            SceneInfoContainer.clearContainer();
+            scene.ClearScene();
 
-            SceneInfoContainer.sceneInputFilePath = inputFile;
+            scene.sceneInputFilePath = inputFile;
          
-            StreamReader file = new System.IO.StreamReader(inputFile);
+            StreamReader file = new StreamReader(inputFile);
 
-            SceneInfoContainer.sceneOutputFilePath = textReadLine(file);
+            scene.sceneOutputFilePath = textReadLine(file);
 
-            SceneInfoContainer.imageOutputFilePath = textReadLine(file);
+            scene.imageOutputFilePath = textReadLine(file);
                         
-            SceneInfoContainer.screenWidth = (int)TextReadNumber(file);
+            scene.screenWidth = (int)TextReadNumber(file);
 
-            SceneInfoContainer.screenHeight = (int)TextReadNumber(file);
+            scene.screenHeight = (int)TextReadNumber(file);
 
-            SceneInfoContainer.superSamples = (int)TextReadNumber(file);
+            scene.superSamples = (int)TextReadNumber(file);
 
-            SceneInfoContainer.shapeCount = (int)TextReadNumber(file);
+            scene.shapeCount = (int)TextReadNumber(file);
 
-            SceneInfoContainer.lightCount = (int)TextReadNumber(file);
+            scene.lightCount = (int)TextReadNumber(file);
 
-            SceneInfoContainer.lightSamples = (int)TextReadNumber(file);
+            scene.lightSamples = (int)TextReadNumber(file);
 
-            SceneInfoContainer.indirectLightSamples = (int)TextReadNumber(file);
+            scene.indirectLightSamples = (int)TextReadNumber(file);
 
-            SceneInfoContainer.maxDepth = (int)TextReadNumber(file);
+            scene.maxDepth = (int)TextReadNumber(file);
 
             ReadShepes(file);
 
@@ -78,16 +84,16 @@ namespace RayTracer
 
             file.Close();
 
-            FileWriter = new StreamWriter(SceneInfoContainer.imageOutputFilePath);
+            FileWriter = new StreamWriter(scene.imageOutputFilePath);
         }
 
         private void ReadLights(StreamReader file)
         {
-            SceneInfoContainer.lights = new Light[SceneInfoContainer.lightCount];
+            scene.lights = new Light[scene.lightCount];
 
             int i = 0;
 
-            while(i <= (SceneInfoContainer.lightCount - 1))
+            while(i <= (scene.lightCount - 1))
             {
                 if (textReadLine(file).Contains("l"))
                 {
@@ -96,7 +102,7 @@ namespace RayTracer
                         Shape tmpShape = ProcessSphereBodyTXT(file);
                         if(tmpShape != null)
                         {
-                        SceneInfoContainer.lights[i] = new Light(tmpShape);
+                        scene.lights[i] = new Light(tmpShape);
                         }
                     }
                     else
@@ -118,23 +124,23 @@ namespace RayTracer
             
 
             int i = 0;
-            SceneInfoContainer.shapes = new Shape[SceneInfoContainer.shapeCount];
+            scene.shapes = new Shape[scene.shapeCount];
 
-            while (i <= (SceneInfoContainer.shapeCount-1)) 
+            while (i <= (scene.shapeCount-1)) 
             {
                 string tmp = textReadLine(file);
               
                 if (tmp.Contains("s"))
                 {
-                    SceneInfoContainer.shapes[i] = ProcessSphereBodyTXT(file);
+                    scene.shapes[i] = ProcessSphereBodyTXT(file);
                 }
                 else if (tmp.Contains("c"))
                 {
-                    SceneInfoContainer.shapes[i] = ProcessCuboidBodyTXT(file);
+                    scene.shapes[i] = ProcessCuboidBodyTXT(file);
                 }
                 else if (tmp.Contains("p"))
                 {
-                     SceneInfoContainer.shapes[i] = ProcessPlaneBodyTXT(file);
+                     scene.shapes[i] = ProcessPlaneBodyTXT(file);
                 }
                 else
                 {
@@ -150,7 +156,7 @@ namespace RayTracer
         public Shape ProcessPlaneBodyTXT(StreamReader file)
         {
 
-            double x, y, z, r, g, b, width, height, dept;
+            double x, y, z, r, g, b, dept;
 
             r = TextReadNumber(file);
             g = TextReadNumber(file);
@@ -207,7 +213,7 @@ namespace RayTracer
             return tmpSphere;
         }
       
-        private double TextReadNumber(System.IO.StreamReader file)
+        private double TextReadNumber(StreamReader file)
         {
             string output_string = "";
             double output = 0;
@@ -238,7 +244,7 @@ namespace RayTracer
         public void SaveImgToTXT(int y, int color)
         {
 
-            if(y != SceneInfoContainer.screenWidth)
+            if(y != scene.screenWidth)
             {
                 FileWriter.Write(color.ToString() + " ");
             }

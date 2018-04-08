@@ -154,6 +154,15 @@ namespace RayTracer
             return (direction.Dot(normal) > 0.0) ? direction : -direction;
         }
 
+        internal static Vector RandomPointInPlane(double depth)
+        {
+            return new Vector(
+                depth * ((2.0 * random.Value.NextDouble()) - 1.0),
+                depth * ((2.0 * random.Value.NextDouble()) - 1.0),
+                depth * ((2.0 * random.Value.NextDouble()) - 1.0)).Normalized;
+
+        }
+
         public Vector Clamped(double low, double high)
         {
             return new Vector(

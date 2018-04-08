@@ -11,7 +11,13 @@ namespace RayTracer
     {
         public double Distance { get; set; }
         
-        public override Vector RandomPoint => throw new NotImplementedException();
+        public override Vector RandomPoint
+        {
+            get
+            {
+                return point + Vector.RandomPointInPlane(Distance);
+            }
+        }
 
         public Plane(Material material, Vector point, double distance)
             : base(material, point)
