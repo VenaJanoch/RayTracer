@@ -50,28 +50,28 @@ namespace RayTracer
             Console.WriteLine("Image output file name/path");
             string imageOutputFilePath = Console.ReadLine();
 
-            Console.Write("Scene width (i.e., 1-3840): ");
+            Console.Write("Scene width (1-3840): ");
             int screenWidth = Int32.Parse(Console.ReadLine());
          
-            Console.Write("Scene height (i.e., 1-3840): ");
+            Console.Write("Scene height (1-3840): ");
             int screenHeight = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Super samples (i.e., 1-8): ");
+            Console.Write("Super samples (1-8): ");
             int superSamples = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Shape count (i.e., 1-200): ");
+            Console.Write("Shape count (1-20): ");
             int shapeCount = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Light count (i.e., 1-5): ");
+            Console.Write("Light count (1-5): ");
             int lightCount = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Light samples (i.e., 1-128): ");
+            Console.Write("Light samples (1-128): ");
             int lightSamples = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Indirect light samples (i.e., 1-128): ");
+            Console.Write("Indirect light samples (1-128): ");
             int indirectLightSamples = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Max recursion depth (i.e., 0-10): ");
+            Console.Write("Max recursion depth (0-10): ");
             int maxDepth = Int32.Parse(Console.ReadLine());
 
 

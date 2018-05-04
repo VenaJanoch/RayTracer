@@ -7,3 +7,5 @@ RayTracer/bin/
 .vs/RayTracer/v15/.suo
 .vs/RayTracer2/v15/
 packages/
+RayTracerGUI/bin/
+RayTracerGUI/obj/

@@ -29,7 +29,7 @@ namespace RayTracer
             double superSamplesHalfRecip = superSamplesRecip * 0.5;
             double superSamplesSquaredRecip = 1.0 / (superSamples * superSamples);
 
-           // Bitmap image = new Bitmap(screenWidth, screenHeight);
+            Bitmap image = new Bitmap(screenWidth, screenHeight);
 
 
             object obj = new object();
@@ -56,16 +56,19 @@ namespace RayTracer
                     Color colorARGB = Color.FromArgb(color.toARGB());
                     lock (obj)
                     {
-             //           image.SetPixel(x, y, colorARGB); 
-                        fileManipulator.SaveImgToTXT(y, color.Brightness(colorARGB) );
+                        image.SetPixel(x, y, colorARGB); 
+                       // fileManipulator.SaveImgToTXT(y, color.Brightness(colorARGB) );
                         
                     }
                 }
-            });
-            
 
-            //image.Save("Output.png", ImageFormat.Png);
-            //image.Dispose();
+
+
+            });
+
+            scene.Image = image;
+            image.Save("Output.png", ImageFormat.Png);
+            image.Dispose();
 
            Console.WriteLine("Done!");
            Console.Read();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace RayTracer
         private const double AmbientLight = 0.60;
         private const double Reflectivity = 0.30;
 
+        public Bitmap Image { get; set; }
 
         public const double radius = 10.0;
 
@@ -43,7 +45,12 @@ namespace RayTracer
             fileManipulator = new FileManipulator(this);
 
             fileManipulator.loadSceneFromTXT(input_file);
+            RenderImage();
+            
+        }
 
+        private void RenderImage()
+        {
             double aspect = (double)(screenWidth / screenHeight);
 
             camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
@@ -78,8 +85,10 @@ namespace RayTracer
             CreateShapes(random);
             CreateLights(random);
 
-            fileManipulator.SaveSceneToTXT();
-
+           // fileManipulator.SaveSceneToTXT();
+            fileManipulator.SaveSceneToXML();
+            RenderImage();
+        
         }
 
         private void CreateLights(Random random)
