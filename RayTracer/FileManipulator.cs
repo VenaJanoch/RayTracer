@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace RayTracer
 {
@@ -46,8 +47,7 @@ namespace RayTracer
 
             File.WriteAllText(scene.sceneOutputFilePath, outputText);
 
-
-
+           
         }
 
         public void loadSceneFromTXT(string inputFile)
@@ -87,6 +87,158 @@ namespace RayTracer
             FileWriter = new StreamWriter(scene.imageOutputFilePath);
         }
 
+        public void LoadSceneFromXML(string inputFile)
+        {
+           
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(inputFile);
+
+            XmlNode outputFileNode = doc.SelectSingleNode("/scene/sceneOutputFile");
+            scene.sceneOutputFilePath = outputFileNode.InnerText.Trim();
+
+            XmlNode imageFileNode = doc.SelectSingleNode("/scene/imageOutputFile");
+            scene.imageOutputFilePath = imageFileNode.InnerText.Trim();
+
+            XmlNode widthNode = doc.SelectSingleNode("/scene/screenWidth");
+            scene.screenWidth = Int32.Parse(widthNode.InnerText.Trim());
+
+            XmlNode heightNode = doc.SelectSingleNode("/scene/screenHeight");
+            scene.screenHeight = Int32.Parse(heightNode.InnerText.Trim());
+
+            XmlNode superSamplesNode = doc.SelectSingleNode("/scene/superSamples");
+            scene.superSamples = Int32.Parse(superSamplesNode.InnerText.Trim());
+
+            XmlNode shapeCountNode = doc.SelectSingleNode("/scene/shapeCount");
+            scene.shapeCount = Int32.Parse(shapeCountNode.InnerText.Trim());
+
+            XmlNode lightCountNode = doc.SelectSingleNode("/scene/lightCount");
+            scene.lightCount = Int32.Parse(lightCountNode.InnerText.Trim());
+
+            XmlNode lightSamplesNode = doc.SelectSingleNode("/scene/lightSamples");
+            scene.lightSamples = Int32.Parse(lightSamplesNode.InnerText.Trim());
+
+            XmlNode indiretLightSamplesNode = doc.SelectSingleNode("/scene/indiretLightSamples");
+            scene.indirectLightSamples = Int32.Parse(indiretLightSamplesNode[0].InnerText.Trim());
+
+            XmlNode maxDepthNode = doc.SelectSingleNode("/scene/maxDepth");
+            scene.maxDepth = Int32.Parse(maxDepthNode.InnerText.Trim());
+
+
+            XmlNode sceneNode =
+                doc.SelectSingleNode("/scene");
+
+            XmlNodeList shapeNodeList =
+                sceneNode.SelectNodes("shape");
+
+           
+            XmlNodeList lightNodeList =
+                sceneNode.SelectNodes("light");
+
+
+            scene.shapes = new Shape[scene.shapeCount];
+            for (int i = 0; i <= shapeNodeList.Count - 1; i++)
+            {
+               scene.shapes[i] = ProcessShapeXML(shapeNodeList[i], doc);
+            }
+
+            scene.lights = new Light[scene.lightCount];
+            for (int i = 0; i <= lightNodeList.Count - 1; i++)
+            {
+                scene.lights[i] = ProcessLightXML(lightNodeList[i], doc);
+            }
+
+        }
+
+        private Light ProcessLightXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            return new Light(ProcessSphereFromXML(xmlNode.SelectSingleNode("shape"), doc));
+        }
+
+        private Shape ProcessShapeXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            
+            XmlNode pom = xmlNode.FirstChild;
+
+            switch (pom.InnerText.Trim())
+            {
+                case "sphere":
+                 return   ProcessSphereFromXML(pom, doc);
+                    
+                case "cuboid":
+                 return   ProcessCuboidFromXML(pom, doc);
+                    
+                case "plane":
+                  return  ProcessPlaneFromXML(pom, doc);
+                   
+                default:
+                    return null;
+            }
+
+           
+            
+        }
+
+        private Shape ProcessPlaneFromXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            double distance;
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+
+            distance = Double.Parse(xmlNode.SelectSingleNode("distance").InnerText.Trim());
+
+
+            return new Plane(m, v, distance);
+        }
+
+        private Shape ProcessCuboidFromXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            double width, height, depth;
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+
+            width = Double.Parse(xmlNode.SelectSingleNode("width").InnerText.Trim());
+            height = Double.Parse(xmlNode.SelectSingleNode("height").InnerText.Trim());
+            depth = Double.Parse(xmlNode.SelectSingleNode("depth").InnerText.Trim());
+
+
+            return new Cuboid(m, v, width, height,depth);
+        }
+
+        private Shape ProcessSphereFromXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            double radius;
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+
+            radius = Double.Parse(xmlNode.SelectSingleNode("radius").InnerText.Trim());
+
+
+            return new Sphere(m, v, radius);
+        }
+
+        private Material ProcessMaterialFromXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+
+            return new Material(v);
+        }
+
+        private Vector ProcessVectorFromXML(XmlNode xmlNode, XmlDocument doc)
+        {
+            XmlNode xNode = xmlNode.SelectSingleNode("x");
+            XmlNode yNode = xmlNode.SelectSingleNode("y");
+            XmlNode zNode = xmlNode.SelectSingleNode("z");
+
+            double x = Double.Parse(xNode.InnerText.Trim());
+            double y = Double.Parse(yNode.InnerText.Trim());
+            double z = Double.Parse(zNode.InnerText.Trim());
+
+            return new Vector(x, y, z);
+        }
+
         private void ReadLights(StreamReader file)
         {
             scene.lights = new Light[scene.lightCount];
@@ -117,6 +269,62 @@ namespace RayTracer
                 }
                 i++;
             }
+        }
+
+        internal void SaveSceneToXML()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml("<?xml version='1.0'?>" +
+                        "<scene>" +
+                        "</scene>");
+            
+            doc.DocumentElement.AppendChild(CreateXMLElem("sceneOutputFile", scene.sceneOutputFilePath, doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("imageOutputFile", scene.sceneInputFilePath, doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("screenWidth", scene.screenWidth.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("screenHeight", scene.screenHeight.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("superSamples", scene.superSamples.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("shapeCount", scene.shapeCount.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("lightCount", scene.lightCount.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("lightSamples", scene.lightSamples.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("indiretLightSamples", scene.indirectLightSamples.ToString(), doc));
+            doc.DocumentElement.AppendChild(CreateXMLElem("maxDepth", scene.maxDepth.ToString(), doc));
+
+
+
+            if (scene.shapes != null)
+            {
+
+                for (int i = 0; i < scene.shapeCount; i++)
+                {
+                    doc.DocumentElement.AppendChild(scene.shapes[i].GetInXML(doc));
+                     
+                }
+            }
+
+            if (scene.lights != null)
+            {
+
+                for (int i = 0; i < scene.lightCount; i++)
+                {
+                    doc.DocumentElement.AppendChild(scene.lights[i].GetInXML(doc));
+
+                }
+            }
+      
+            doc.Save(scene.sceneOutputFilePath);
+
+            FileWriter = new StreamWriter(scene.imageOutputFilePath);
+
+        }
+
+
+        private XmlElement CreateXMLElem(String elmName, String text, XmlDocument doc)
+        {
+            XmlElement elem = doc.CreateElement(elmName);
+            XmlText eText = doc.CreateTextNode(text);
+            elem.AppendChild(eText);
+
+            return elem;
         }
 
         private void ReadShepes(StreamReader file)
@@ -212,7 +420,26 @@ namespace RayTracer
             Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), radius);
             return tmpSphere;
         }
-      
+
+        public Shape ProcessSphereBodyXML(XmlNode shape)
+        {
+            shape.ChildNodes.Item(0).InnerText.Trim()
+            double x, y, z, r, g, b, radius;
+
+            r = TextReadNumber(file);
+            g = TextReadNumber(file);
+            b = TextReadNumber(file);
+
+            x = TextReadNumber(file);
+            y = TextReadNumber(file);
+            z = TextReadNumber(file);
+
+            radius = TextReadNumber(file);
+
+            Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), radius);
+            return tmpSphere;
+        }
+
         private double TextReadNumber(StreamReader file)
         {
             string output_string = "";

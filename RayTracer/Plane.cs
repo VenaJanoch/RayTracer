@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml;
 
 namespace RayTracer
 {
     public class Plane : Shape
     {
         public double Distance { get; set; }
-        
+
         public override Vector RandomPoint
         {
             get
@@ -20,7 +20,7 @@ namespace RayTracer
         }
 
         public Plane(Material material, Vector point, double distance)
-            : base(material, point)
+            : base(material, point, "Plane")
         { 
            Distance = distance;  
         }
@@ -49,6 +49,26 @@ namespace RayTracer
             return "p\r\n" + base.ToString() + "\r\n" + Distance + "\r\n";
         }
 
+        public override XmlElement GetInXML(XmlDocument doc)
+        {
+            XmlElement shapeElm = doc.CreateElement("shape");
+            XmlElement elem = doc.CreateElement("plane");
+            XmlElement pointElem = point.GetInXML(doc);
+            XmlElement matElem = material.GetInXML(doc);
+            XmlElement distElm = doc.CreateElement("distance");
+
+            XmlText eText = doc.CreateTextNode(Distance.ToString());
+
+            distElm.AppendChild(eText);
+            elem.AppendChild(distElm);
+            elem.AppendChild(matElem);
+            elem.AppendChild(pointElem);
+            shapeElm.AppendChild(elem);
+
+            return shapeElm;
+
+        }
+        
     }
 
 }

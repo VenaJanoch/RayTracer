@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml;
 
 namespace RayTracer
 {
@@ -15,7 +15,7 @@ namespace RayTracer
         private double radiusSquared;
 
         public Sphere(Material material, Vector point, double radius)
-            : base(material, point)
+            : base(material, point, "Sphere")
         {
             this.radius = radius;
             radiusRecip = 1.0 / radius;
@@ -56,5 +56,27 @@ namespace RayTracer
         {           
             return "s\r\n" +  base.ToString()+ "\r\n" + radius + "\r\n";
         }
+
+        public override XmlElement GetInXML(XmlDocument doc)
+        {
+            XmlElement shapeElm = doc.CreateElement("shape");
+            XmlElement elem = doc.CreateElement("sphere");
+            XmlElement pointElem = point.GetInXML(doc);
+            XmlElement matElem = material.GetInXML(doc);
+            XmlElement radElem = doc.CreateElement("radius");
+
+
+            XmlText eText = doc.CreateTextNode(radius.ToString());
+
+            radElem.AppendChild(eText);
+            elem.AppendChild(radElem);
+            elem.AppendChild(matElem);
+            elem.AppendChild(pointElem);
+            shapeElm.AppendChild(elem);
+
+            return shapeElm;
+
+        }
+
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace RayTracer
 {
@@ -76,6 +77,29 @@ namespace RayTracer
                 double lenRecip = 1.0 / this.Length;
                 return new Vector(this.X * lenRecip, this.Y * lenRecip, this.Z * lenRecip);
             }
+        }
+
+        internal XmlElement GetInXML(XmlDocument doc)
+        {
+            XmlElement vectorElm = doc.CreateElement("vector");
+            XmlElement xElm = doc.CreateElement("x");
+            XmlElement yElm = doc.CreateElement("y");
+            XmlElement zElm = doc.CreateElement("z");
+            
+            XmlText xText = doc.CreateTextNode(X.ToString());
+            XmlText yText = doc.CreateTextNode(Y.ToString());
+            XmlText zText = doc.CreateTextNode(Z.ToString());
+
+            xElm.AppendChild(xText);
+            yElm.AppendChild(yText);
+            zElm.AppendChild(zText);
+
+            vectorElm.AppendChild(xElm);
+            vectorElm.AppendChild(yElm);
+            vectorElm.AppendChild(zElm);
+
+
+            return vectorElm;
         }
 
         public double LengthSquared

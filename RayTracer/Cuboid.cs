@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace RayTracer
 {
@@ -13,8 +14,9 @@ namespace RayTracer
         public double Height { get; set; }
         public double Depth { get; set; }
 
+
         public Cuboid(Material material, Vector point, double width, double height, double depth)
-            : base(material, point)
+            : base(material, point, "Cuboid")
         {
             this.Width = width;
             this.Height = height;
@@ -177,6 +179,35 @@ namespace RayTracer
             return "c\r\n" + base.ToString() + "\r\n" + Width + "\r\n" + Height + "\r\n" + Depth + "\r\n";
         }
 
+        public override XmlElement GetInXML(XmlDocument doc)
+        {
+            XmlElement shapeElm = doc.CreateElement("shape");
+            XmlElement elem = doc.CreateElement("cuboid");
+            XmlElement pointElem = point.GetInXML(doc);
+            XmlElement matElem = material.GetInXML(doc);
 
+            XmlElement widthElm = doc.CreateElement("width");
+            XmlElement heightElm = doc.CreateElement("height");
+            XmlElement depthElm = doc.CreateElement("depth");
+
+            XmlText widthText = doc.CreateTextNode(Width.ToString());
+            XmlText heightText = doc.CreateTextNode(Height.ToString());
+            XmlText depthText = doc.CreateTextNode(Depth.ToString());
+
+            widthElm.AppendChild(widthText);
+            heightElm.AppendChild(heightText);
+            depthElm.AppendChild(depthText);
+
+            elem.AppendChild(widthElm);
+            elem.AppendChild(heightElm);
+            elem.AppendChild(depthElm);
+
+            elem.AppendChild(matElem);
+            elem.AppendChild(pointElem);
+            shapeElm.AppendChild(elem);
+
+            return shapeElm;
+
+        }
     }
 }
