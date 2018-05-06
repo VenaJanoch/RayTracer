@@ -31,6 +31,8 @@ namespace RayTracer
         
         public string Type { get { return type; } }
 
+        public Cuboid Width { get; set; }
+
         public abstract Intersection Intersect(Ray ray);
 
         public abstract XmlElement GetInXML(XmlDocument doc);

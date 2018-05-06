@@ -1,4 +1,5 @@
-﻿using RayTracerGUI.Controlers;
+﻿using RayTracer;
+using RayTracerGUI.Controlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,9 @@ namespace RayTracerGUI
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            InputFormControler inputFormControler = new InputFormControler();
-            ImageControler imageControler = new ImageControler(inputFormControler);
+            Scene scene = new Scene();
+            InputFormControler inputFormControler = new InputFormControler(scene);
+            ImageControler imageControler = new ImageControler(inputFormControler, scene);
 
             Application.Run(imageControler.InitWindow);
         }

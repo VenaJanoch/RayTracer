@@ -8,17 +8,30 @@ using System.Windows.Forms;
 
 namespace RayTracerGUI.Controlers
 {
+    
+
    public class InputFormControler
     {
-       
-        public void CcontrolRandomForm(String outputFile, String imgFile, String width, String height,
+        public Scene Scene { get; set; }      
+
+        public InputFormControler(Scene scene)
+        {
+            Scene = scene;
+        }
+
+        public void ControlRandomForm(String outputFile, String imgFile, String width, String height,
            String superSamples, String shapeCount, String lightCount, String lightSamples, String indirectLightSamples, String maxDepth)
         {
       //      if(outputFile == null || imgFile == null ||)
         }
 
-      
+        internal void InitScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples, int indirectLightSamples, int maxDepth)
+        {
+            Scene.FillScene(sceneOutputFilePath, imageOutputFilePath,
+                            screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
+                            indirectLightSamples, maxDepth);
 
+        }
     }
        
 

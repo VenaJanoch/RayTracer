@@ -1,4 +1,5 @@
-﻿using RayTracerGUI.Controlers;
+﻿using RayTracer;
+using RayTracerGUI.Controlers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,11 +17,13 @@ namespace RayTracerGUI
     public partial class InitWindow : Form
     {
 
-        public ImageControler imageControler { get; set; }
+        public ImageControler ImageControler { get; set; }
+        public InputFormControler InputControler { get; set; }
 
-        public InitWindow(ImageControler imageControler)
+        public InitWindow(ImageControler imageControler, InputFormControler inputControler)
         {
-            this.imageControler = imageControler;
+            ImageControler = imageControler;
+            InputControler = inputControler;
             InitializeComponent();
 
         }
@@ -28,12 +31,25 @@ namespace RayTracerGUI
 
         public void SetImageToImageView(string imagePath)
         {
-            imageView.Image = Image.FromFile("Output.png"); // TODO: opravit na imagePath
+            imageView.Image = Image.FromFile(imagePath);
+        }
+
+
+        public void SetImageToImageView()
+        {
+            if (ImageControler.IsAvailableImage())
+            {
+            imageView.Image = Image.FromFile(ImageControler.Scene.imageOutputFilePath);
+            }
+            else
+            {
+              //  imageView.Image = Image.FromFile("noFileCreated.png");
+            }
         }
 
         private void ShowRandomSceneWindow(object sender, EventArgs e)
         {
-            var randScene = new RandomSceneWindow(this);
+            var randScene = new RandomSceneWindow(this, InputControler, ImageControler);
             randScene.Show();
 
         }
@@ -50,9 +66,8 @@ namespace RayTracerGUI
             if (openFileDialog.ShowDialog() == DialogResult.OK && (fileStream = openFileDialog.OpenFile()) != null)
             {
                 string fileName = openFileDialog.FileName;
-
-                XElement sceneFile = XElement.Load(fileName);
-
+                ImageControler.FileManipulator.LoadSceneFromXML(fileName);
+             //   SetImageToImageView(ImageControler.Scene.imageOutputFilePath);
             }
         }
 
@@ -61,19 +76,29 @@ namespace RayTracerGUI
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void StartRenderingBT_Click(object sender, EventArgs e)
         {
-
+            ImageControler.RenderImage();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void StopRenderingBT_Click(object sender, EventArgs e)
         {
-
+            ImageControler.StopRenderingImage();
         }
 
         private void sphareToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SaveSceneBT_Click(object sender, EventArgs e)
+        {
+            ImageControler.FileManipulator.SaveSceneToXML();
+        }
+
+        private void D3ViewBT_Click(object sender, EventArgs e)
+        {
+            SetImageToImageView();
         }
     }
 }

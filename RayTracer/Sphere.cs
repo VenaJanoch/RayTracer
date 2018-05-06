@@ -10,14 +10,14 @@ namespace RayTracer
     public class Sphere : Shape
     {
 
-        private double radius;
+        public double Radius { get; set; }
         private double radiusRecip;
         private double radiusSquared;
 
         public Sphere(Material material, Vector point, double radius)
             : base(material, point, "Sphere")
         {
-            this.radius = radius;
+            Radius = radius;
             radiusRecip = 1.0 / radius;
             radiusSquared = radius * radius;
         }
@@ -26,7 +26,7 @@ namespace RayTracer
         {
             get
             {
-                return point + Vector.RandomPointInSphere(radius);
+                return point + Vector.RandomPointInSphere(Radius);
             }
         }
 
@@ -54,7 +54,7 @@ namespace RayTracer
 
         public override string ToString()
         {           
-            return "s\r\n" +  base.ToString()+ "\r\n" + radius + "\r\n";
+            return "s\r\n" +  base.ToString()+ "\r\n" + Radius + "\r\n";
         }
 
         public override XmlElement GetInXML(XmlDocument doc)
@@ -66,7 +66,7 @@ namespace RayTracer
             XmlElement radElem = doc.CreateElement("radius");
 
 
-            XmlText eText = doc.CreateTextNode(radius.ToString());
+            XmlText eText = doc.CreateTextNode(Radius.ToString());
 
             radElem.AppendChild(eText);
             elem.AppendChild(radElem);

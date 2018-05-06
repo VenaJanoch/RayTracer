@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Canvas2D.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controlers\ImageControler.cs" />
     <Compile Include="Controlers\InputFormControler.cs" />
     <Compile Include="RandomSceneWindow.cs">

@@ -30,7 +30,7 @@
         {
             this.LoadScene = new System.Windows.Forms.Button();
             this.CreateRandomScene = new System.Windows.Forms.Button();
-            this.CreateOwnScene = new System.Windows.Forms.Button();
+            this.SaveScene = new System.Windows.Forms.Button();
             this.cuboidBT = new System.Windows.Forms.Button();
             this.sphareBT = new System.Windows.Forms.Button();
             this.planeBT = new System.Windows.Forms.Button();
@@ -47,12 +47,13 @@
             this.cuboidToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sphareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.planeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startRanderingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopRanderingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lightBT = new System.Windows.Forms.Button();
-            this.addLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.d3ViewBT = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -73,18 +74,19 @@
             this.CreateRandomScene.Name = "CreateRandomScene";
             this.CreateRandomScene.Size = new System.Drawing.Size(162, 35);
             this.CreateRandomScene.TabIndex = 1;
-            this.CreateRandomScene.Text = "Create random scene";
+            this.CreateRandomScene.Text = "Create random Scene";
             this.CreateRandomScene.UseVisualStyleBackColor = true;
             this.CreateRandomScene.Click += new System.EventHandler(this.ShowRandomSceneWindow);
             // 
-            // CreateOwnScene
+            // SaveScene
             // 
-            this.CreateOwnScene.Location = new System.Drawing.Point(554, 35);
-            this.CreateOwnScene.Name = "CreateOwnScene";
-            this.CreateOwnScene.Size = new System.Drawing.Size(162, 34);
-            this.CreateOwnScene.TabIndex = 4;
-            this.CreateOwnScene.Text = "Create own scene";
-            this.CreateOwnScene.UseVisualStyleBackColor = true;
+            this.SaveScene.Location = new System.Drawing.Point(554, 35);
+            this.SaveScene.Name = "SaveScene";
+            this.SaveScene.Size = new System.Drawing.Size(162, 34);
+            this.SaveScene.TabIndex = 4;
+            this.SaveScene.Text = "Save scene";
+            this.SaveScene.UseVisualStyleBackColor = true;
+            this.SaveScene.Click += new System.EventHandler(this.SaveSceneBT_Click);
             // 
             // cuboidBT
             // 
@@ -115,23 +117,23 @@
             // 
             // stopRanderBT
             // 
-            this.stopRanderBT.Location = new System.Drawing.Point(1061, 196);
+            this.stopRanderBT.Location = new System.Drawing.Point(1061, 308);
             this.stopRanderBT.Name = "stopRanderBT";
             this.stopRanderBT.Size = new System.Drawing.Size(162, 39);
             this.stopRanderBT.TabIndex = 10;
             this.stopRanderBT.Text = "Stop randering";
             this.stopRanderBT.UseVisualStyleBackColor = true;
-            this.stopRanderBT.Click += new System.EventHandler(this.button1_Click);
+            this.stopRanderBT.Click += new System.EventHandler(this.StopRenderingBT_Click);
             // 
             // startRanderBT
             // 
-            this.startRanderBT.Location = new System.Drawing.Point(1061, 151);
+            this.startRanderBT.Location = new System.Drawing.Point(1061, 263);
             this.startRanderBT.Name = "startRanderBT";
             this.startRanderBT.Size = new System.Drawing.Size(162, 39);
             this.startRanderBT.TabIndex = 9;
             this.startRanderBT.Text = "Start randering";
             this.startRanderBT.UseVisualStyleBackColor = true;
-            this.startRanderBT.Click += new System.EventHandler(this.button2_Click);
+            this.startRanderBT.Click += new System.EventHandler(this.StartRenderingBT_Click);
             // 
             // d2BT
             // 
@@ -139,7 +141,7 @@
             this.d2BT.Name = "d2BT";
             this.d2BT.Size = new System.Drawing.Size(162, 39);
             this.d2BT.TabIndex = 8;
-            this.d2BT.Text = "2D";
+            this.d2BT.Text = "2D View";
             this.d2BT.UseVisualStyleBackColor = true;
             this.d2BT.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -150,6 +152,8 @@
             this.imageView.Size = new System.Drawing.Size(739, 454);
             this.imageView.TabIndex = 11;
             this.imageView.TabStop = false;
+            this.imageView.Paint += new System.Windows.Forms.PaintEventHandler(ImageControler.Paint2Dscene());
+
             // 
             // menuStrip1
             // 
@@ -206,21 +210,27 @@
             // cuboidToolStripMenuItem
             // 
             this.cuboidToolStripMenuItem.Name = "cuboidToolStripMenuItem";
-            this.cuboidToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.cuboidToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
             this.cuboidToolStripMenuItem.Text = "Add Cuboid";
             // 
             // sphareToolStripMenuItem
             // 
             this.sphareToolStripMenuItem.Name = "sphareToolStripMenuItem";
-            this.sphareToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.sphareToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
             this.sphareToolStripMenuItem.Text = "Add Sphare";
             this.sphareToolStripMenuItem.Click += new System.EventHandler(this.sphareToolStripMenuItem_Click);
             // 
             // planeToolStripMenuItem
             // 
             this.planeToolStripMenuItem.Name = "planeToolStripMenuItem";
-            this.planeToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.planeToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
             this.planeToolStripMenuItem.Text = "Add Plane";
+            // 
+            // addLightToolStripMenuItem
+            // 
+            this.addLightToolStripMenuItem.Name = "addLightToolStripMenuItem";
+            this.addLightToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
+            this.addLightToolStripMenuItem.Text = "Add Light";
             // 
             // projectToolStripMenuItem
             // 
@@ -235,19 +245,19 @@
             // dViewToolStripMenuItem
             // 
             this.dViewToolStripMenuItem.Name = "dViewToolStripMenuItem";
-            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.dViewToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.dViewToolStripMenuItem.Text = "2D View";
             // 
             // startRanderingToolStripMenuItem
             // 
             this.startRanderingToolStripMenuItem.Name = "startRanderingToolStripMenuItem";
-            this.startRanderingToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.startRanderingToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.startRanderingToolStripMenuItem.Text = "Start randering";
             // 
             // stopRanderingToolStripMenuItem
             // 
             this.stopRanderingToolStripMenuItem.Name = "stopRanderingToolStripMenuItem";
-            this.stopRanderingToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.stopRanderingToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
             this.stopRanderingToolStripMenuItem.Text = "Stop randering";
             // 
             // lightBT
@@ -259,15 +269,20 @@
             this.lightBT.Text = "Add Light";
             this.lightBT.UseVisualStyleBackColor = true;
             // 
-            // addLightToolStripMenuItem
+            // d3ViewBT
             // 
-            this.addLightToolStripMenuItem.Name = "addLightToolStripMenuItem";
-            this.addLightToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.addLightToolStripMenuItem.Text = "Add Light";
+            this.d3ViewBT.Location = new System.Drawing.Point(1061, 151);
+            this.d3ViewBT.Name = "d3ViewBT";
+            this.d3ViewBT.Size = new System.Drawing.Size(162, 39);
+            this.d3ViewBT.TabIndex = 14;
+            this.d3ViewBT.Text = "3D View";
+            this.d3ViewBT.UseVisualStyleBackColor = true;
+            this.d3ViewBT.Click += new System.EventHandler(this.D3ViewBT_Click);
             // 
             // InitWindow
             // 
             this.ClientSize = new System.Drawing.Size(1253, 672);
+            this.Controls.Add(this.d3ViewBT);
             this.Controls.Add(this.lightBT);
             this.Controls.Add(this.imageView);
             this.Controls.Add(this.stopRanderBT);
@@ -276,7 +291,7 @@
             this.Controls.Add(this.planeBT);
             this.Controls.Add(this.sphareBT);
             this.Controls.Add(this.cuboidBT);
-            this.Controls.Add(this.CreateOwnScene);
+            this.Controls.Add(this.SaveScene);
             this.Controls.Add(this.CreateRandomScene);
             this.Controls.Add(this.LoadScene);
             this.Controls.Add(this.menuStrip1);
@@ -295,7 +310,7 @@
 
         private System.Windows.Forms.Button LoadScene;
         private System.Windows.Forms.Button CreateRandomScene;
-        private System.Windows.Forms.Button CreateOwnScene;
+        private System.Windows.Forms.Button SaveScene;
         private System.Windows.Forms.Button cuboidBT;
         private System.Windows.Forms.Button sphareBT;
         private System.Windows.Forms.Button planeBT;
@@ -318,6 +333,7 @@
         private System.Windows.Forms.ToolStripMenuItem stopRanderingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addLightToolStripMenuItem;
         private System.Windows.Forms.Button lightBT;
+        private System.Windows.Forms.Button d3ViewBT;
     }
 }
 

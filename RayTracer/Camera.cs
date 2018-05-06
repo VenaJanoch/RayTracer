@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RayTracer
 
 {
-    class Camera
+   public class Camera
     {
         public Vector eye { get; }
         public Vector forward { get; }

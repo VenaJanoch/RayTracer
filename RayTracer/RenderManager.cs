@@ -3,26 +3,32 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 
+
 namespace RayTracer
 {
-    class RenderManager
+    public class RenderManager
     {
 
         private Scene scene;
-        private Camera camera;
         private FileManipulator fileManipulator;
+        public bool Rendering { get; set; }
 
 
-        public RenderManager(Scene scene, Camera camera, FileManipulator fileManipulator)
+        public RenderManager(Scene scene, FileManipulator fileManipulator)
         {
             this.scene = scene;
-            this.camera = camera;
             this.fileManipulator = fileManipulator;
         }
 
 
-        public void RenderingPicture(int screenWidth, int screenHeight, int superSamples )
+        public void RenderingPicture()
         {
+            Rendering = true;
+
+            int screenWidth = scene.screenWidth;
+            int screenHeight = scene.screenWidth;
+            int superSamples = scene.superSamples;
+
             double widthRecip = 1.0 / screenWidth;
             double heightRecip = 1.0 / screenHeight;
             double superSamplesRecip = 1.0 / superSamples;
@@ -46,10 +52,13 @@ namespace RayTracer
                         {
                             double ii = i * superSamplesRecip;
                             double xx = (x + superSamplesHalfRecip + ii) * widthRecip;
-                            Ray ray = camera.ImageRay(xx, yy);
+                            Ray ray = scene.Camera.ImageRay(xx, yy);
                             color = color + scene.RayTrace(ray).Clamped();
                         }
+
+                        if (!Rendering) { break; }
                     }
+
 
                     color = color * superSamplesSquaredRecip;
 
@@ -60,6 +69,7 @@ namespace RayTracer
                        // fileManipulator.SaveImgToTXT(y, color.Brightness(colorARGB) );
                         
                     }
+                    if (!Rendering) { break; }
                 }
 
 
@@ -67,15 +77,17 @@ namespace RayTracer
             });
 
             scene.Image = image;
-            image.Save("Output.png", ImageFormat.Png);
+            image.Save(scene.imageOutputFilePath, ImageFormat.Png);
             image.Dispose();
 
-           Console.WriteLine("Done!");
-           Console.Read();
 
 
+            Console.WriteLine("Done!");           
         }
-
-
+        
+        public void StopRenderingImage()
+        {
+            Rendering = false;
+        }
     }
 }

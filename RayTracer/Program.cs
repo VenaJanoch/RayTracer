@@ -9,7 +9,7 @@ namespace RayTracer
 {
     class Program
     {
-        private static Scene scene;
+     //   private static Scene scene;
 
         static void Main(string[] args)
         {
@@ -27,19 +27,19 @@ namespace RayTracer
             }
             else
             {
-                process_scene_file();
+            //    process_scene_file();
             }
 
         }
 
-        private static void process_scene_file()
+        /*private static void process_scene_file()
         {
             Console.WriteLine("Give scene input file path");
             string path = Console.ReadLine();
 
             scene = new Scene(path);
 
-        }
+        }*/
 
         private static void get_scene_info_from_console()
         {
@@ -75,9 +75,9 @@ namespace RayTracer
             int maxDepth = Int32.Parse(Console.ReadLine());
 
 
-            scene = new Scene(sceneOutputFilePath, imageOutputFilePath,
+            /* scene = new Scene(sceneOutputFilePath, imageOutputFilePath,
             screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
-            indirectLightSamples, maxDepth);
+            indirectLightSamples, maxDepth);*/ 
 
 
         }

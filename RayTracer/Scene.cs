@@ -13,10 +13,8 @@ namespace RayTracer
    public class Scene
     {
         
-        private Camera camera;
-        private FileManipulator fileManipulator;
-        private RenderManager RenderManager;
-
+        public Camera Camera { get; set; }
+        
         private const double AmbientLight = 0.60;
         private const double Reflectivity = 0.30;
 
@@ -24,8 +22,8 @@ namespace RayTracer
 
         public const double radius = 10.0;
 
-        public Shape[] shapes { get; set; }
-        public Light[] lights { get; set; } 
+        public List<Shape> shapes { get; set; }
+        public List<Light> lights { get; set; } 
 
         public string sceneOutputFilePath { get; set; }
         public string sceneInputFilePath { get; set; }
@@ -39,30 +37,8 @@ namespace RayTracer
         public int indirectLightSamples { get; set; }
         public int maxDepth { get; set; }      
 
-        public Scene(string input_file)
-        {
-            sceneInputFilePath = input_file;
-            fileManipulator = new FileManipulator(this);
-
-            fileManipulator.loadSceneFromTXT(input_file);
-            RenderImage();
-            
-        }
-
-        private void RenderImage()
-        {
-            double aspect = (double)(screenWidth / screenHeight);
-
-            camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
-
-            RenderManager = new RenderManager(this, camera, fileManipulator);
-
-            RenderManager.RenderingPicture(screenWidth, screenHeight, superSamples);
-
-            fileManipulator.FileWriter.Close();
-        }
-
-        public Scene(string sceneOutputFilePath, string imageOutputFilePath,
+        
+        public void FillScene(string sceneOutputFilePath, string imageOutputFilePath,
             int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples,
             int indirectLightSamples, int maxDepth)
         {
@@ -77,36 +53,30 @@ namespace RayTracer
             this.lightSamples = lightSamples;
             this.indirectLightSamples = indirectLightSamples;
             this.maxDepth = maxDepth;
-
-            fileManipulator = new FileManipulator(this);
-
+            
             Random random = new Random();
 
             CreateShapes(random);
             CreateLights(random);
-
-           // fileManipulator.SaveSceneToTXT();
-            fileManipulator.SaveSceneToXML();
-            RenderImage();
-        
+            
         }
 
         private void CreateLights(Random random)
         {
-            lights = new Light[lightCount];
+            lights = new List<Light>();
 
             for (int i = 0; i < lightCount; ++i)
             {
                 Sphere sphere = new Sphere(new Material(Vector.RandomColor),
        new Vector(0.0, 1.0, 0.0) + Vector.RandomPointInSphere(radius),
        0.5 + random.NextDouble());
-                lights[i] = new Light(sphere);
+                lights.Add(new Light(sphere));
             }
         }
 
         private void CreateShapes(Random random)
         {
-            shapes = new Shape[shapeCount];
+            shapes = new List<Shape>();
 
             double width, height, depth;
             int randInt = 0;
@@ -116,8 +86,9 @@ namespace RayTracer
 
                 if ( randInt == 0)
                 {
-                    shapes[i] = new Sphere(new Material(Vector.RandomColor),
+                   Sphere tmpS = new Sphere(new Material(Vector.RandomColor),
                         Vector.RandomPointInSphere(radius), 0.5 + random.NextDouble());
+                    shapes.Add(tmpS);
                 }
                 else if(randInt == 1)
                 {
@@ -126,9 +97,10 @@ namespace RayTracer
                     height = 0.5 + random.NextDouble();
                     depth = 0.5 + random.NextDouble();
 
-                    shapes[i] = new Cuboid(new Material(Vector.RandomColor),
+                   Cuboid c = new Cuboid(new Material(Vector.RandomColor),
                         Vector.RandomPointInCuboid(width, height, depth), width,
                         height, depth);
+                    shapes.Add(c);
                 }
                 /*else
                 {

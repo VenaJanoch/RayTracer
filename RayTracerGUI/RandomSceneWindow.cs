@@ -1,4 +1,5 @@
 ﻿using RayTracer;
+using RayTracerGUI.Controlers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,9 +16,16 @@ namespace RayTracerGUI
     {
 
         private InitWindow initWindow;
-        public RandomSceneWindow(InitWindow initWindow)
+        private InputFormControler InputControler { get; set; }
+
+        private ImageControler ImageControler { get; set; }
+
+        public RandomSceneWindow(InitWindow initWindow, InputFormControler inputControler, ImageControler imageControler)
         {
+            InputControler = inputControler;
+            ImageControler = imageControler;
             this.initWindow = initWindow;
+
             InitializeComponent();
         }
 
@@ -41,13 +49,13 @@ namespace RayTracerGUI
             int indirectLightSamples = Int32.Parse(this.indirectLightSamples.Text);
             int maxDepth = Int32.Parse(recursionDepth.Text);
 
-           Scene scene = new Scene(sceneOutputFilePath, imageOutputFilePath,
-            screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
-            indirectLightSamples, maxDepth);
+            InputControler.InitScene(sceneOutputFilePath, imageOutputFilePath,
+                    screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
+                    indirectLightSamples, maxDepth);
 
-            initWindow.SetImageToImageView(scene.imageOutputFilePath);
-
-            this.Close();
+            ImageControler.FileManipulator.SaveSceneToXML();
+            
+             Close();
             
         }
 
