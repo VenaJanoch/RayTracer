@@ -91,7 +91,7 @@ namespace RayTracer
         {
            
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(inputFile);
+            doc.Load(inputFile);
 
             XmlNode outputFileNode = doc.SelectSingleNode("/scene/sceneOutputFile");
             scene.sceneOutputFilePath = outputFileNode.InnerText.Trim();
@@ -118,7 +118,7 @@ namespace RayTracer
             scene.lightSamples = Int32.Parse(lightSamplesNode.InnerText.Trim());
 
             XmlNode indiretLightSamplesNode = doc.SelectSingleNode("/scene/indiretLightSamples");
-            scene.indirectLightSamples = Int32.Parse(indiretLightSamplesNode[0].InnerText.Trim());
+            scene.indirectLightSamples = Int32.Parse(indiretLightSamplesNode.InnerText.Trim());
 
             XmlNode maxDepthNode = doc.SelectSingleNode("/scene/maxDepth");
             scene.maxDepth = Int32.Parse(maxDepthNode.InnerText.Trim());
@@ -181,11 +181,11 @@ namespace RayTracer
         private Shape ProcessPlaneFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double distance;
-            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("plane/vector"), doc);
 
-            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("plane/material"), doc);
 
-            distance = Double.Parse(xmlNode.SelectSingleNode("distance").InnerText.Trim());
+            distance = Double.Parse(xmlNode.SelectSingleNode("plane/distance").InnerText.Trim());
 
 
             return new Plane(m, v, distance);
@@ -194,13 +194,13 @@ namespace RayTracer
         private Shape ProcessCuboidFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double width, height, depth;
-            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("cuboid/vector"), doc);
 
-            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("cuboid/material"), doc);
 
-            width = Double.Parse(xmlNode.SelectSingleNode("width").InnerText.Trim());
-            height = Double.Parse(xmlNode.SelectSingleNode("height").InnerText.Trim());
-            depth = Double.Parse(xmlNode.SelectSingleNode("depth").InnerText.Trim());
+            width = Double.Parse(xmlNode.SelectSingleNode("cuboid/width").InnerText.Trim());
+            height = Double.Parse(xmlNode.SelectSingleNode("cuboid/height").InnerText.Trim());
+            depth = Double.Parse(xmlNode.SelectSingleNode("cuboid/depth").InnerText.Trim());
 
 
             return new Cuboid(m, v, width, height,depth);
@@ -209,11 +209,12 @@ namespace RayTracer
         private Shape ProcessSphereFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double radius;
-            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
 
-            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
+            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("sphere/vector"), doc);
 
-            radius = Double.Parse(xmlNode.SelectSingleNode("radius").InnerText.Trim());
+            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("sphere/material"), doc);
+
+            radius = Double.Parse(xmlNode.SelectSingleNode("sphere/radius").InnerText.Trim());
 
 
             return new Sphere(m, v, radius);
@@ -406,25 +407,6 @@ namespace RayTracer
         {
 
             double x, y,z,r,g,b, radius;
-
-            r = TextReadNumber(file);
-            g = TextReadNumber(file);
-            b = TextReadNumber(file);
-
-            x = TextReadNumber(file);
-            y = TextReadNumber(file);
-            z = TextReadNumber(file);
-
-            radius = TextReadNumber(file);
-
-            Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), radius);
-            return tmpSphere;
-        }
-
-        public Shape ProcessSphereBodyXML(XmlNode shape)
-        {
-            shape.ChildNodes.Item(0).InnerText.Trim()
-            double x, y, z, r, g, b, radius;
 
             r = TextReadNumber(file);
             g = TextReadNumber(file);
