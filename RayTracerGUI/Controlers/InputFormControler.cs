@@ -1,6 +1,7 @@
 ﻿using RayTracer;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,46 @@ namespace RayTracerGUI.Controlers
 
 
 
+        }
+
+        internal void UpdateCuboid(Cuboid cuboid, string coordX, string coordY,
+            string coordZ, string width, string height, string depth, Color color)
+        {
+            cuboid.Point.X = Double.Parse(coordX);
+            cuboid.Point.Y = Double.Parse(coordY);
+            cuboid.Point.Z = Double.Parse(coordZ);
+
+            cuboid.Width = Double.Parse(width);
+            cuboid.Height = Double.Parse(height);
+            cuboid.Depth = Double.Parse(depth);
+
+            double r = (int)color.R / 255;
+            double g = (int)color.G / 255;
+            double b = (int)color.B / 255;
+
+
+            cuboid.Material.Color.X = r;
+            cuboid.Material.Color.Y = g;
+            cuboid.Material.Color.Z = b;
+        }
+
+        internal void UpdateSphere(Sphere sphere, string coordX, string coordY,
+            string coordZ, string radius, Color color)
+        {
+            sphere.Point.X = Double.Parse(coordX);
+            sphere.Point.Y = Double.Parse(coordY);
+            sphere.Point.Z = Double.Parse(coordZ);
+
+            sphere.Radius = Double.Parse(radius);
+            
+            double r = (int)color.R / 255;
+            double g = (int)color.G / 255;
+            double b = (int)color.B / 255;
+
+
+            sphere.Material.Color.X = r;
+            sphere.Material.Color.Y = g;
+            sphere.Material.Color.Z = b;
         }
     }
        

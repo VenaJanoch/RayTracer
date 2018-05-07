@@ -26,6 +26,7 @@ namespace RayTracerGUI
             InputControler = inputControler;
             InitializeComponent();
             canvas2D1.ImageControler = imageControler;
+            canvas2D1.InputFormControler = inputControler;
         }
 
         private void ShowRandomSceneWindow(object sender, EventArgs e)

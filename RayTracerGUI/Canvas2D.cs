@@ -13,6 +13,7 @@ namespace RayTracerGUI
     public class Canvas2D : Control
     {
         public ImageControler ImageControler { get; set; }
+        public InputFormControler InputFormControler { get; set; }
 
         private Boolean scene2D;
 
@@ -45,6 +46,75 @@ namespace RayTracerGUI
             scene2D = false;
             Invalidate();
         }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+
+            foreach (Shape shape in ImageControler.Scene.shapes)
+            {
+                if (ShapeMouseDoubleClickControl(e, shape))
+                {
+                    return;
+                }
+            }
+
+            foreach (Light light in ImageControler.Scene.lights)
+            {
+                if (ShapeMouseDoubleClickControl(e, light.Shape))
+                {
+                    return;
+                }
+            }
+
+            if (ShapeMouseDoubleClickControl(e, Camera))
+            {
+                return;
+            }
+
+        }
+
+        private bool ShapeMouseDoubleClickControl(MouseEventArgs e, Shape shape)
+        {
+            if (shape.Type.Contains("Cuboid"))
+            {
+                Cuboid c = (Cuboid)shape;
+
+                int width = (int)(Math.Abs(c.Width) * SCALE);
+                int height = (int)(Math.Abs(c.Height) * SCALE);
+
+                int x = (int)(c.Point.X * SCALE - width / 2) + Width / 2;
+                int y = (int)(-c.Point.Y * SCALE - height / 2) + Height / 2;
+
+                Rectangle r = new Rectangle(x, y, width, height);
+
+                if (r.Contains(e.Location))
+                {
+                    var editWindow = new CuboidEditWindow(c, ImageControler, InputFormControler);
+                    editWindow.Show();
+                    return true;
+                }
+            }
+            else if (shape.Type.Contains("Sphere"))
+            {
+                Sphere s = (Sphere)shape;
+                int radius = (int)(Math.Abs(s.Radius) * SCALE);
+
+                int x = (int)(s.Point.X * SCALE) + Width / 2;
+                int y = (int)(-s.Point.Y * SCALE) + Height / 2;
+
+
+                if (Math.Abs(x - e.X) <= radius / 2 && Math.Abs(y - e.Y) <= radius / 2)
+                {
+                    var editWindow = new SphereEditWindow(s, ImageControler, InputFormControler);
+                    editWindow.Show();
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);

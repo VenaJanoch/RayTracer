@@ -306,7 +306,8 @@ namespace RayTracer
             XmlText eText = doc.CreateTextNode(scene.Camera.FovY.ToString());
 
             angleElm.AppendChild(eText);
-            cameElm.AppendChild(eText);
+
+            cameElm.AppendChild(angleElm);
 
             doc.DocumentElement.AppendChild(cameElm);
 
@@ -332,8 +333,7 @@ namespace RayTracer
       
             doc.Save(scene.sceneOutputFilePath);
 
-            FileWriter = new StreamWriter(scene.imageOutputFilePath);
-
+            
         }
 
 
