@@ -18,7 +18,7 @@ namespace RayTracerGUI
 
         private Shape moveShape;
 
-       // public Cuboid Camera { get; set; } 
+        public Cuboid Camera { get; set; } 
 
         public Shape ChooseShape { get; set; }
 
@@ -30,7 +30,7 @@ namespace RayTracerGUI
         {
             DoubleBuffered = true;
             ResizeRedraw = true;
-         //   Camera = new Cuboid(new Material(new Vector(0.5,0.5,0.5)),new Vector(-Height / 2, Width/2, 0), 1, 1, 0);
+            
         }
 
 
@@ -48,7 +48,7 @@ namespace RayTracerGUI
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if(moveShape == null)
+            if (moveShape == null)
             {
                 return;
             }
@@ -56,24 +56,24 @@ namespace RayTracerGUI
             if (moveShape.Type.Contains("Cuboid"))
             {
                 Cuboid c = (Cuboid)moveShape;
-                
+
                 int width = (int)(Math.Abs(c.Width) * SCALE);
                 int height = (int)(Math.Abs(c.Height) * SCALE);
 
-                double x = (double)(e.X  - Width / 2 )/SCALE ;
-                double y = -(double)(e.Y  - Height / 2 ) / SCALE ;
+                double x = (double)(e.X - Width / 2) / SCALE;
+                double y = -(double)(e.Y - Height / 2) / SCALE;
 
                 c.Point.X = x;
                 c.Point.Y = y;
-             
+
             }
             else if (moveShape.Type.Contains("Sphere"))
             {
                 Sphere s = (Sphere)moveShape;
                 int radius = (int)(Math.Abs(s.Radius) * SCALE);
 
-                double x = (double)(e.X - mouseOffset.X - Width / 2 ) / SCALE ;
-                double y = -((double)(e.Y - mouseOffset.Y - Height / 2) / SCALE );
+                double x = (double)(e.X - mouseOffset.X - Width / 2) / SCALE;
+                double y = -((double)(e.Y - mouseOffset.Y - Height / 2) / SCALE);
 
                 s.Point.X = x;
                 s.Point.Y = y;
@@ -103,13 +103,16 @@ namespace RayTracerGUI
 
             foreach (Light light in ImageControler.Scene.lights)
             {
-                
+                if (ShapeMouseDownControl(e, light.Shape))
+              {
+                  return;
+              }
             }
 
-          /*  if (ShapeMouseDownControl(e, Camera))
-            {
-                return;
-            }*/
+              if (ShapeMouseDownControl(e, Camera))
+              {
+                  return;
+              }
 
             moveShape = null;
             Invalidate();
@@ -168,21 +171,24 @@ namespace RayTracerGUI
 
             if (scene2D)
             {
-            
+
                 foreach (Shape shape in ImageControler.Scene.shapes)
                 {
                     AddShapes(shape, false, e);
 
                 }
 
-                foreach ( Light light in ImageControler.Scene.lights)
+                foreach (Light light in ImageControler.Scene.lights)
                 {
                     AddShapes(light.Shape, true, e);
 
                 }
 
+                if(Camera != null)
+                {
+                AddShapes(Camera, false, e);
 
-                //AddShapes(Camera, false, e);
+                }
 
             }
             else
@@ -194,12 +200,18 @@ namespace RayTracerGUI
 
         }
 
-       public void AddShapes(Shape shape, bool light, PaintEventArgs e)
+        public void SetCame()
+        {
+            Camera = new Cuboid(new Material(new Vector(0.5, 0.5, 0.5)), new Vector(ImageControler.Scene.Camera.eye.X, ImageControler.Scene.Camera.eye.Y, 0), 1, 0.5, 0);
+        }
+
+        public void AddShapes(Shape shape, bool light, PaintEventArgs e)
         {
             Color colorARGB = Color.FromArgb(shape.Material.Color.toARGB());
-            
-            using (Brush brush = new SolidBrush(colorARGB)) { 
-                
+
+            using (Brush brush = new SolidBrush(colorARGB))
+            {
+
                 if (shape.Type.Contains("Cuboid"))
                 {
                     Cuboid c = (Cuboid)shape;
@@ -213,8 +225,8 @@ namespace RayTracerGUI
 
                     e.Graphics.FillRectangle(brush, new Rectangle(x, y, width, height));
 
-                        e.Graphics.DrawRectangle(Pens.Bisque, new Rectangle(x, y, width, height));
-                    
+                    e.Graphics.DrawRectangle(Pens.Bisque, new Rectangle(x, y, width, height));
+
 
                     if (ChooseShape == shape)
                     {
@@ -235,7 +247,7 @@ namespace RayTracerGUI
                     {
                         using (Pen myPen = new Pen(Color.DarkCyan))
                         {
-                          e.Graphics.DrawEllipse(Pens.DarkCyan, new Rectangle(x, y, radius, radius));
+                            e.Graphics.DrawEllipse(Pens.DarkCyan, new Rectangle(x, y, radius, radius));
                         }
                     }
 
@@ -248,5 +260,5 @@ namespace RayTracerGUI
         }
     }
 
-    
+
 }

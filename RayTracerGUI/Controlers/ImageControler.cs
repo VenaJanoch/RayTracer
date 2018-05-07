@@ -39,11 +39,11 @@ namespace RayTracerGUI.Controlers
 
         }
 
-        public void RenderImage()
+        public void RenderImage(double x, double y)
         {
-            double aspect = (Scene.screenWidth / Scene.screenHeight);
+            Scene.Camera.eye.X = x;
+            Scene.Camera.eye.Y = y;
 
-            Scene.Camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
             var th = new Thread(new ThreadStart(RenderManager.RenderingPicture));
 
             th.IsBackground = true;

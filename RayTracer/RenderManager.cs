@@ -76,8 +76,8 @@ namespace RayTracer
 
             });
 
-            scene.Image = image;
             image.Save(scene.imageOutputFilePath, ImageFormat.Png);
+            scene.Image = image;
            
 
             Console.WriteLine("Done!");           

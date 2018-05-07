@@ -150,7 +150,7 @@
             this.d2BT.TabIndex = 8;
             this.d2BT.Text = "2D View";
             this.d2BT.UseVisualStyleBackColor = true;
-            this.d2BT.Click += new System.EventHandler(this.button3_Click);
+            this.d2BT.Click += new System.EventHandler(this.Show2DSceneClick);
             // 
             // menuStrip1
             // 

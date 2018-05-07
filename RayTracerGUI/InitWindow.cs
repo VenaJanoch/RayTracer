@@ -28,26 +28,6 @@ namespace RayTracerGUI
             canvas2D1.ImageControler = imageControler;
         }
 
-
-        public void SetImageToImageView(string imagePath)
-        {
-            //Canvas.BackgroundImage = Image.FromFile(imagePath);
-            
-        }
-
-
-        public void SetImageToImageView()
-        {
-            if (ImageControler.IsAvailableImage())
-            {
-          // Canvas.BackgroundImage = Image.FromFile(ImageControler.Scene.imageOutputFilePath);
-            }
-            else
-            {
-              //  imageView.Image = Image.FromFile("noFileCreated.png");
-            }
-        }
-
         private void ShowRandomSceneWindow(object sender, EventArgs e)
         {
             var randScene = new RandomSceneWindow(this, InputControler, ImageControler);
@@ -72,14 +52,15 @@ namespace RayTracerGUI
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Show2DSceneClick(object sender, EventArgs e)
         {
+            canvas2D1.SetCame();
             canvas2D1.Set2DScene();
         }
 
         private void StartRenderingBT_Click(object sender, EventArgs e)
         {
-            ImageControler.RenderImage();
+            ImageControler.RenderImage(canvas2D1.Camera.Point.X, canvas2D1.Camera.Point.Y);
         }
 
         private void StopRenderingBT_Click(object sender, EventArgs e)
@@ -104,22 +85,22 @@ namespace RayTracerGUI
 
         private void AddCuboidBT_Click(object sender, EventArgs e)
         {
-            Cuboid c = new Cuboid(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height/2, -canvas2D1.Width, 0), 1, 1, 1);
+            Cuboid c = new Cuboid(new Material(new Vector(0, 0, 0)), new Vector(1.5, -1.5, 0), 1, 1, 1);
             ImageControler.Scene.shapes.Add(c);
             canvas2D1.Set2DScene();
-            
+
         }
 
         private void sphareBT_Click(object sender, EventArgs e)
         {
-            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height / 2, -canvas2D1.Width, 0), 1);
+            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
             ImageControler.Scene.shapes.Add(s);
             canvas2D1.Set2DScene();
         }
 
         private void lightBT_Click(object sender, EventArgs e)
         {
-            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height / 2, -canvas2D1.Width, 0), 1);
+            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
             Light l = new Light(s);
             ImageControler.Scene.lights.Add(l);
             canvas2D1.Set2DScene();

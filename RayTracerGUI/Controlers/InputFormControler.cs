@@ -31,6 +31,11 @@ namespace RayTracerGUI.Controlers
                             screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
                             indirectLightSamples, maxDepth);
 
+            double aspect = (Scene.screenWidth / Scene.screenHeight);
+            Scene.Camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
+
+
+
         }
     }
        

@@ -123,6 +123,16 @@ namespace RayTracer
             XmlNode maxDepthNode = doc.SelectSingleNode("/scene/maxDepth");
             scene.maxDepth = Int32.Parse(maxDepthNode.InnerText.Trim());
 
+            XmlNode cameraNode = doc.SelectSingleNode("/scene/camera");
+            Vector eye = ProcessVectorFromXML(cameraNode.SelectSingleNode("vector"), doc);
+
+            string sangle = cameraNode.SelectSingleNode("angle").InnerText.Trim();
+
+            double angle = Double.Parse(sangle);
+            double aspect = (scene.screenWidth / scene.screenHeight);
+
+            scene.Camera = Camera.LookAt(eye, new Vector(), aspect, angle);
+
 
             XmlNode sceneNode =
                 doc.SelectSingleNode("/scene");
@@ -289,7 +299,16 @@ namespace RayTracer
             doc.DocumentElement.AppendChild(CreateXMLElem("indiretLightSamples", scene.indirectLightSamples.ToString(), doc));
             doc.DocumentElement.AppendChild(CreateXMLElem("maxDepth", scene.maxDepth.ToString(), doc));
 
+            XmlElement cameElm = doc.CreateElement("camera");
+            cameElm.AppendChild(scene.Camera.eye.GetInXML(doc));
+            XmlElement angleElm = doc.CreateElement("angle");
+            
+            XmlText eText = doc.CreateTextNode(scene.Camera.FovY.ToString());
 
+            angleElm.AppendChild(eText);
+            cameElm.AppendChild(eText);
+
+            doc.DocumentElement.AppendChild(cameElm);
 
             if (scene.shapes != null)
             {

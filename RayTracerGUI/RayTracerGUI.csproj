@@ -50,6 +50,12 @@
     </Compile>
     <Compile Include="Controlers\ImageControler.cs" />
     <Compile Include="Controlers\InputFormControler.cs" />
+    <Compile Include="CuboidEditWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CuboidEditWindow.Designer.cs">
+      <DependentUpon>CuboidEditWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="RandomSceneWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +70,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CuboidEditWindow.resx">
+      <DependentUpon>CuboidEditWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InitWindow.resx">
       <DependentUpon>InitWindow.cs</DependentUpon>
     </EmbeddedResource>
