@@ -37,7 +37,6 @@
             this.stopRanderBT = new System.Windows.Forms.Button();
             this.startRanderBT = new System.Windows.Forms.Button();
             this.d2BT = new System.Windows.Forms.Button();
-            this.imageView = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createRandomSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,12 +53,13 @@
             this.stopRanderingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lightBT = new System.Windows.Forms.Button();
             this.d3ViewBT = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.imageView)).BeginInit();
+            this.canvas2D1 = new RayTracerGUI.Canvas2D();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // LoadScene
             // 
+            this.LoadScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LoadScene.Location = new System.Drawing.Point(722, 34);
             this.LoadScene.Name = "LoadScene";
             this.LoadScene.Size = new System.Drawing.Size(162, 35);
@@ -70,6 +70,7 @@
             // 
             // CreateRandomScene
             // 
+            this.CreateRandomScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CreateRandomScene.Location = new System.Drawing.Point(386, 34);
             this.CreateRandomScene.Name = "CreateRandomScene";
             this.CreateRandomScene.Size = new System.Drawing.Size(162, 35);
@@ -80,6 +81,7 @@
             // 
             // SaveScene
             // 
+            this.SaveScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveScene.Location = new System.Drawing.Point(554, 35);
             this.SaveScene.Name = "SaveScene";
             this.SaveScene.Size = new System.Drawing.Size(162, 34);
@@ -96,6 +98,7 @@
             this.cuboidBT.TabIndex = 5;
             this.cuboidBT.Text = "Add Cuboid";
             this.cuboidBT.UseVisualStyleBackColor = true;
+            this.cuboidBT.Click += new System.EventHandler(this.AddCuboidBT_Click);
             // 
             // sphareBT
             // 
@@ -105,6 +108,7 @@
             this.sphareBT.TabIndex = 6;
             this.sphareBT.Text = "Add Sphare";
             this.sphareBT.UseVisualStyleBackColor = true;
+            this.sphareBT.Click += new System.EventHandler(this.sphareBT_Click);
             // 
             // planeBT
             // 
@@ -117,6 +121,7 @@
             // 
             // stopRanderBT
             // 
+            this.stopRanderBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopRanderBT.Location = new System.Drawing.Point(1061, 308);
             this.stopRanderBT.Name = "stopRanderBT";
             this.stopRanderBT.Size = new System.Drawing.Size(162, 39);
@@ -127,6 +132,7 @@
             // 
             // startRanderBT
             // 
+            this.startRanderBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.startRanderBT.Location = new System.Drawing.Point(1061, 263);
             this.startRanderBT.Name = "startRanderBT";
             this.startRanderBT.Size = new System.Drawing.Size(162, 39);
@@ -137,6 +143,7 @@
             // 
             // d2BT
             // 
+            this.d2BT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.d2BT.Location = new System.Drawing.Point(1061, 106);
             this.d2BT.Name = "d2BT";
             this.d2BT.Size = new System.Drawing.Size(162, 39);
@@ -144,16 +151,6 @@
             this.d2BT.Text = "2D View";
             this.d2BT.UseVisualStyleBackColor = true;
             this.d2BT.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // imageView
-            // 
-            this.imageView.Location = new System.Drawing.Point(276, 95);
-            this.imageView.Name = "imageView";
-            this.imageView.Size = new System.Drawing.Size(739, 454);
-            this.imageView.TabIndex = 11;
-            this.imageView.TabStop = false;
-            this.imageView.Paint += new System.Windows.Forms.PaintEventHandler(ImageControler.Paint2Dscene());
-
             // 
             // menuStrip1
             // 
@@ -268,9 +265,11 @@
             this.lightBT.TabIndex = 13;
             this.lightBT.Text = "Add Light";
             this.lightBT.UseVisualStyleBackColor = true;
+            this.lightBT.Click += new System.EventHandler(this.lightBT_Click);
             // 
             // d3ViewBT
             // 
+            this.d3ViewBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.d3ViewBT.Location = new System.Drawing.Point(1061, 151);
             this.d3ViewBT.Name = "d3ViewBT";
             this.d3ViewBT.Size = new System.Drawing.Size(162, 39);
@@ -279,12 +278,25 @@
             this.d3ViewBT.UseVisualStyleBackColor = true;
             this.d3ViewBT.Click += new System.EventHandler(this.D3ViewBT_Click);
             // 
+            // canvas2D1
+            // 
+            this.canvas2D1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.canvas2D1.ChooseShape = null;
+            this.canvas2D1.ImageControler = null;
+            this.canvas2D1.Location = new System.Drawing.Point(231, 87);
+            this.canvas2D1.Name = "canvas2D1";
+            this.canvas2D1.Size = new System.Drawing.Size(814, 573);
+            this.canvas2D1.TabIndex = 15;
+            this.canvas2D1.Text = "canvas2D";
+            // 
             // InitWindow
             // 
             this.ClientSize = new System.Drawing.Size(1253, 672);
+            this.Controls.Add(this.canvas2D1);
             this.Controls.Add(this.d3ViewBT);
             this.Controls.Add(this.lightBT);
-            this.Controls.Add(this.imageView);
             this.Controls.Add(this.stopRanderBT);
             this.Controls.Add(this.startRanderBT);
             this.Controls.Add(this.d2BT);
@@ -297,7 +309,6 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "InitWindow";
-            ((System.ComponentModel.ISupportInitialize)(this.imageView)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -317,7 +328,6 @@
         private System.Windows.Forms.Button stopRanderBT;
         private System.Windows.Forms.Button startRanderBT;
         private System.Windows.Forms.Button d2BT;
-        private System.Windows.Forms.PictureBox imageView;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createRandomSceneToolStripMenuItem;
@@ -334,6 +344,7 @@
         private System.Windows.Forms.ToolStripMenuItem addLightToolStripMenuItem;
         private System.Windows.Forms.Button lightBT;
         private System.Windows.Forms.Button d3ViewBT;
+        private Canvas2D canvas2D1;
     }
 }
 

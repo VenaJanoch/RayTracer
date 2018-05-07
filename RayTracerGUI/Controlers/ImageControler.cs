@@ -32,9 +32,8 @@ namespace RayTracerGUI.Controlers
         public ImageControler(InputFormControler inputFormControler, Scene scene)
         {
             InputFormControler = inputFormControler;
-            Canvas2D = new Canvas2D(this);
-            InitWindow = new InitWindow(this, inputFormControler);
             Scene = scene;
+            InitWindow = new InitWindow(this, inputFormControler);
             FileManipulator = new FileManipulator(scene);
             RenderManager = new RenderManager(scene, FileManipulator);
 
@@ -47,10 +46,11 @@ namespace RayTracerGUI.Controlers
             Scene.Camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
             var th = new Thread(new ThreadStart(RenderManager.RenderingPicture));
 
+            th.IsBackground = true;
+
             th.Start();
 
-            th.IsBackground = true;
-            
+              
         }
 
 
@@ -68,9 +68,6 @@ namespace RayTracerGUI.Controlers
             RenderManager.StopRenderingImage();
         }
 
-        internal PaintEventHandler paint2Dscene()
-        {
-            
-        }
+        
     }
 }

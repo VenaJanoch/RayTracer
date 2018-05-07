@@ -29,7 +29,17 @@ namespace RayTracer
 
         public Vector Point { get { return point; } }
         
-        public string Type { get { return type; } }
+        public string Type
+        {
+            get { return type; }
+            set
+            {
+                if (value.Contains("Camera"))
+                {
+                    type = value;
+                }
+            }
+        }
 
         public Cuboid Width { get; set; }
 

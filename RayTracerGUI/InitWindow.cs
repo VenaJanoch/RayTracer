@@ -25,13 +25,14 @@ namespace RayTracerGUI
             ImageControler = imageControler;
             InputControler = inputControler;
             InitializeComponent();
-
+            canvas2D1.ImageControler = imageControler;
         }
 
 
         public void SetImageToImageView(string imagePath)
         {
-            imageView.Image = Image.FromFile(imagePath);
+            //Canvas.BackgroundImage = Image.FromFile(imagePath);
+            
         }
 
 
@@ -39,7 +40,7 @@ namespace RayTracerGUI
         {
             if (ImageControler.IsAvailableImage())
             {
-            imageView.Image = Image.FromFile(ImageControler.Scene.imageOutputFilePath);
+          // Canvas.BackgroundImage = Image.FromFile(ImageControler.Scene.imageOutputFilePath);
             }
             else
             {
@@ -73,7 +74,7 @@ namespace RayTracerGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            canvas2D1.Set2DScene();
         }
 
         private void StartRenderingBT_Click(object sender, EventArgs e)
@@ -98,7 +99,30 @@ namespace RayTracerGUI
 
         private void D3ViewBT_Click(object sender, EventArgs e)
         {
-            SetImageToImageView();
+            canvas2D1.Set3DScene();
+        }
+
+        private void AddCuboidBT_Click(object sender, EventArgs e)
+        {
+            Cuboid c = new Cuboid(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height/2, -canvas2D1.Width, 0), 1, 1, 1);
+            ImageControler.Scene.shapes.Add(c);
+            canvas2D1.Set2DScene();
+            
+        }
+
+        private void sphareBT_Click(object sender, EventArgs e)
+        {
+            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height / 2, -canvas2D1.Width, 0), 1);
+            ImageControler.Scene.shapes.Add(s);
+            canvas2D1.Set2DScene();
+        }
+
+        private void lightBT_Click(object sender, EventArgs e)
+        {
+            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(canvas2D1.Height / 2, -canvas2D1.Width, 0), 1);
+            Light l = new Light(s);
+            ImageControler.Scene.lights.Add(l);
+            canvas2D1.Set2DScene();
         }
     }
 }
