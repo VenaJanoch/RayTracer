@@ -13,11 +13,14 @@ namespace RayTracerGUI.Controlers
 
    public class InputFormControler
     {
-        public Scene Scene { get; set; }      
+        public Scene Scene { get; set; }
 
-        public InputFormControler(Scene scene)
+        public ImageControler imageControler;
+
+        public InputFormControler(Scene scene, ImageControler imageControler)
         {
             Scene = scene;
+            this.imageControler = imageControler;
         }
 
         public void ControlRandomForm(String outputFile, String imgFile, String width, String height,
@@ -60,6 +63,17 @@ namespace RayTracerGUI.Controlers
             cuboid.Material.Color.Z = b;
         }
 
+        internal void UpdateCamera(string coordX, string coordY, string coordZ, string angle)
+        {
+            double aspect = (Scene.screenWidth / Scene.screenHeight);
+
+            double x = Double.Parse(coordX);
+            double y = Double.Parse(coordY);
+            double z = Double.Parse(coordZ);
+
+            Scene.Camera = Camera.LookAt(new Vector(x, y, z), new Vector(), aspect, Double.Parse(angle));
+        }
+
         internal void UpdateSphere(Sphere sphere, string coordX, string coordY,
             string coordZ, string radius, Color color)
         {
@@ -77,6 +91,8 @@ namespace RayTracerGUI.Controlers
             sphere.Material.Color.X = r;
             sphere.Material.Color.Y = g;
             sphere.Material.Color.Z = b;
+
+            imageControler.RepaintCanvas();
         }
     }
        

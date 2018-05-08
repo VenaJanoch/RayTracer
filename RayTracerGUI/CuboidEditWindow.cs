@@ -30,9 +30,9 @@ namespace RayTracerGUI
 
         public void SetDataToComponents()
         {
-            CoordX.Text = cuboid.Point.X.ToString();
-            CoordY.Text = cuboid.Point.Y.ToString();
-            CoordZ.Text = cuboid.Point.Z.ToString();
+            CoordXTB.Text = cuboid.Point.X.ToString();
+            CoordYTB.Text = cuboid.Point.Y.ToString();
+            CoordZTB.Text = cuboid.Point.Z.ToString();
 
             WidthTB.Text = cuboid.Width.ToString();
             HeightTB.Text = cuboid.Height.ToString();

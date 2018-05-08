@@ -53,7 +53,7 @@ namespace RayTracerGUI
 
             foreach (Shape shape in ImageControler.Scene.shapes)
             {
-                if (ShapeMouseDoubleClickControl(e, shape))
+                if (ShapeMouseDoubleClickControl(e, shape, 0))
                 {
                     return;
                 }
@@ -61,20 +61,20 @@ namespace RayTracerGUI
 
             foreach (Light light in ImageControler.Scene.lights)
             {
-                if (ShapeMouseDoubleClickControl(e, light.Shape))
+                if (ShapeMouseDoubleClickControl(e, light.Shape, 1))
                 {
                     return;
                 }
             }
 
-            if (ShapeMouseDoubleClickControl(e, Camera))
+            if (ShapeMouseDoubleClickControl(e, Camera, 2))
             {
                 return;
             }
 
         }
 
-        private bool ShapeMouseDoubleClickControl(MouseEventArgs e, Shape shape)
+        private bool ShapeMouseDoubleClickControl(MouseEventArgs e, Shape shape, int mode)
         {
             if (shape.Type.Contains("Cuboid"))
             {
@@ -90,8 +90,18 @@ namespace RayTracerGUI
 
                 if (r.Contains(e.Location))
                 {
-                    var editWindow = new CuboidEditWindow(c, ImageControler, InputFormControler);
-                    editWindow.Show();
+                    
+                    if (mode == 2)
+                    {
+                     var editWindow = new CameraEditWindow(ImageControler, InputFormControler);
+                         editWindow.Show();
+                    }
+                    else
+                    {
+                     var editWindow = new CuboidEditWindow(c, ImageControler, InputFormControler);
+                        editWindow.Show();
+                    }
+                    
                     return true;
                 }
             }
@@ -106,7 +116,7 @@ namespace RayTracerGUI
 
                 if (Math.Abs(x - e.X) <= radius / 2 && Math.Abs(y - e.Y) <= radius / 2)
                 {
-                    var editWindow = new SphereEditWindow(s, ImageControler, InputFormControler);
+                    var editWindow = new SphereEditWindow(s, mode, ImageControler, InputFormControler);
                     editWindow.Show();
                     return true;
                 }

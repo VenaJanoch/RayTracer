@@ -156,7 +156,7 @@ namespace RayTracer
             {
                 scene.lights.Add(ProcessLightXML(lightNodeList[i], doc));
             }
-
+            
         }
 
         private Light ProcessLightXML(XmlNode xmlNode, XmlDocument doc)

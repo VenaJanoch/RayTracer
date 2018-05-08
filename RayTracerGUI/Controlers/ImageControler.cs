@@ -24,14 +24,11 @@ namespace RayTracerGUI.Controlers
         public RenderManager RenderManager { get; set; }
 
         public Scene Scene { get; set; }
+        
 
-        public Canvas2D Canvas2D { get; set; }
-
-
-
-        public ImageControler(InputFormControler inputFormControler, Scene scene)
+        public ImageControler(Scene scene)
         {
-            InputFormControler = inputFormControler;
+            InputFormControler inputFormControler = new InputFormControler(scene, this);
             Scene = scene;
             InitWindow = new InitWindow(this, inputFormControler);
             FileManipulator = new FileManipulator(scene);
@@ -68,6 +65,9 @@ namespace RayTracerGUI.Controlers
             RenderManager.StopRenderingImage();
         }
 
-        
+        internal void RepaintCanvas()
+        {
+            InitWindow.RepaintCanvas();
+        }
     }
 }

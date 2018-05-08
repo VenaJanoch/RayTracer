@@ -14,15 +14,17 @@ namespace RayTracerGUI
 {
     public partial class SphereEditWindow : Form
     {
-        InputFormControler inputFormControler;
-        ImageControler imageControler;
-        Sphere sphere;
+        private InputFormControler inputFormControler;
+        private ImageControler imageControler;
+        private Sphere sphere;
+        private int light;
 
-        public SphereEditWindow(Sphere sphere, ImageControler imageControler, InputFormControler inputFormControler)
+        public SphereEditWindow(Sphere sphere, int light, ImageControler imageControler, InputFormControler inputFormControler)
         {
             this.inputFormControler = inputFormControler;
             this.imageControler = imageControler;
             this.sphere = sphere;
+            this.light = light;
 
             InitializeComponent();
             SetDataToComponents();
@@ -31,6 +33,11 @@ namespace RayTracerGUI
 
         public void SetDataToComponents()
         {
+            if (light == 1)
+            {
+                SphereEditLB.Text = "Light Sphere Editation";
+            }
+
             CoordXTB.Text = sphere.Point.X.ToString();
             CoordYTB.Text = sphere.Point.Y.ToString();
             CoordZTB.Text = sphere.Point.Z.ToString();
@@ -58,5 +65,6 @@ namespace RayTracerGUI
             Close();
         }
 
+      
     }
 }

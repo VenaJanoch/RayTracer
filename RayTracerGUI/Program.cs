@@ -20,9 +20,8 @@ namespace RayTracerGUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Scene scene = new Scene();
-            InputFormControler inputFormControler = new InputFormControler(scene);
-            ImageControler imageControler = new ImageControler(inputFormControler, scene);
-
+            ImageControler imageControler = new ImageControler(scene);
+            
             Application.Run(imageControler.InitWindow);
         }
     }

@@ -92,6 +92,11 @@ namespace RayTracerGUI
 
         }
 
+        internal void RepaintCanvas()
+        {
+            canvas2D1.Invalidate();
+        }
+
         private void sphareBT_Click(object sender, EventArgs e)
         {
             Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
