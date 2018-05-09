@@ -51,7 +51,7 @@ namespace RayTracerGUI
         {
             base.OnMouseDoubleClick(e);
 
-            foreach (Shape shape in ImageControler.Scene.shapes)
+            foreach (Shape shape in ImageControler.Scene.Shapes)
             {
                 if (ShapeMouseDoubleClickControl(e, shape, 0))
                 {
@@ -59,7 +59,7 @@ namespace RayTracerGUI
                 }
             }
 
-            foreach (Light light in ImageControler.Scene.lights)
+            foreach (Light light in ImageControler.Scene.Lights)
             {
                 if (ShapeMouseDoubleClickControl(e, light.Shape, 1))
                 {
@@ -173,7 +173,7 @@ namespace RayTracerGUI
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            foreach (Shape shape in ImageControler.Scene.shapes)
+            foreach (Shape shape in ImageControler.Scene.Shapes)
             {
                 if (ShapeMouseDownControl(e, shape))
                 {
@@ -181,7 +181,7 @@ namespace RayTracerGUI
                 }
             }
 
-            foreach (Light light in ImageControler.Scene.lights)
+            foreach (Light light in ImageControler.Scene.Lights)
             {
                 if (ShapeMouseDownControl(e, light.Shape))
               {
@@ -252,13 +252,13 @@ namespace RayTracerGUI
             if (scene2D)
             {
 
-                foreach (Shape shape in ImageControler.Scene.shapes)
+                foreach (Shape shape in ImageControler.Scene.Shapes)
                 {
                     AddShapes(shape, false, e);
 
                 }
 
-                foreach (Light light in ImageControler.Scene.lights)
+                foreach (Light light in ImageControler.Scene.Lights)
                 {
                     AddShapes(light.Shape, true, e);
 

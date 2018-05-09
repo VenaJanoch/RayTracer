@@ -17,6 +17,8 @@ namespace RayTracerGUI.Controlers
 
         public ImageControler imageControler;
 
+        public const int maxSceneSize = 3840;
+
         public InputFormControler(Scene scene, ImageControler imageControler)
         {
             Scene = scene;
@@ -39,15 +41,15 @@ namespace RayTracerGUI.Controlers
 
             int screenWidth;
             if ((screenWidth = IsCorectIntNumberFormat("Scene width", width))  == -1) return false;
-            if (!IsCorectIntNumber("Scene width", screenWidth, 3840, 1)) return false;
+            if (!IsCorectIntNumber("Scene width", screenWidth,1, 3840)) return false;
 
             int screenHeight;
             if ((screenHeight = IsCorectIntNumberFormat("Scene height", height)) == -1) return false;
-            if (!IsCorectIntNumber("Scene height", screenHeight, 3840, 1)) return false;
+            if (!IsCorectIntNumber("Scene height", screenHeight, 1, 3840)) return false;
 
-            int iSuperSamples = Int32.Parse(superSamples);
+            int iSuperSamples;
             if ((iSuperSamples = IsCorectIntNumberFormat("Super Samples", superSamples)) == -1) return false;
-            if (!IsCorectIntNumber("Super Samples", iSuperSamples, 8, 1)) return false;
+            if (!IsCorectIntNumber("Super Samples", iSuperSamples, 1, 8)) return false;
 
             int iShapeCount;
             if ((iShapeCount = IsCorectIntNumberFormat("Shape count", shapeCount)) == -1) return false;
@@ -67,12 +69,53 @@ namespace RayTracerGUI.Controlers
 
             int iMaxDepth;
             if ((iMaxDepth = IsCorectIntNumberFormat("Max recursion depth", maxDepth)) == -1) return false;
-            if (!IsCorectIntNumber("Max recursion depth", screenWidth, 0, 10)) return false;
+            if (!IsCorectIntNumber("Max recursion depth", iMaxDepth, 0, 10)) return false;
 
             InitScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, iShapeCount,
-                iLightSamples, iLightSamples, iIndirectLightSamples, iMaxDepth);
+                iLightCount, iLightSamples, iIndirectLightSamples, iMaxDepth);
 
             return true;  
+        }
+
+        internal bool ControlOwnForm(String outputFile, String imgFile, String width, String height,
+           String superSamples, String lightSamples, String indirectLightSamples, String maxDepth)
+        {
+            if (!IsCorectField("Output scene file", outputFile)) return false;
+            if (!IsCorectField("Output image file", imgFile)) return false;
+            if (!IsCorectField("Scene width", width)) return false;
+            if (!IsCorectField("Scene height", height)) return false;
+            if (!IsCorectField("superSamples", superSamples)) return false;
+            if (!IsCorectField("lightSamples", lightSamples)) return false;
+            if (!IsCorectField("indirectLightSamples", indirectLightSamples)) return false;
+            if (!IsCorectField("maxDepth", maxDepth)) return false;
+
+            int screenWidth;
+            if ((screenWidth = IsCorectIntNumberFormat("Scene width", width)) == -1) return false;
+            if (!IsCorectIntNumber("Scene width", screenWidth, 1, 3840)) return false;
+
+            int screenHeight;
+            if ((screenHeight = IsCorectIntNumberFormat("Scene height", height)) == -1) return false;
+            if (!IsCorectIntNumber("Scene height", screenHeight, 1, 3840)) return false;
+
+            int iSuperSamples;
+            if ((iSuperSamples = IsCorectIntNumberFormat("Super Samples", superSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Super Samples", iSuperSamples, 1, 8)) return false;
+
+            int iLightSamples;
+            if ((iLightSamples = IsCorectIntNumberFormat("Light Samples", lightSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Light samples", iLightSamples, 1, 128)) return false;
+
+            int iIndirectLightSamples;
+            if ((iIndirectLightSamples = IsCorectIntNumberFormat("Indirect light samples", indirectLightSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Indirect light samples", iLightSamples, 1, 128)) return false;
+
+            int iMaxDepth;
+            if ((iMaxDepth = IsCorectIntNumberFormat("Max recursion depth", maxDepth)) == -1) return false;
+            if (!IsCorectIntNumber("Max recursion depth", iMaxDepth, 0, 10)) return false;
+
+            InitScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, 0, 0, iLightSamples, iIndirectLightSamples, iMaxDepth);
+
+            return true;
         }
 
         public Double IsCorectDoubleNumberFormat(string fieldName, string value)
@@ -149,7 +192,8 @@ namespace RayTracerGUI.Controlers
             return true;
         }
 
-        internal void InitScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples, int indirectLightSamples, int maxDepth)
+        internal void InitScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth,
+            int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples, int indirectLightSamples, int maxDepth)
         {
             Scene.FillScene(sceneOutputFilePath, imageOutputFilePath,
                             screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
@@ -174,26 +218,26 @@ namespace RayTracerGUI.Controlers
 
             double x = 0;
             if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
-            if (!IsCorectDoubleNumber("X", x, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("X", x, -maxSceneSize, maxSceneSize)) return false;
 
             double y = 0;
             if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
-            if (!IsCorectDoubleNumber("Y", y, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("Y", y, -maxSceneSize, maxSceneSize)) return false;
 
             double z = 0;
             if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
-            if (!IsCorectDoubleNumber("Z", z, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("Z", z, -maxSceneSize, maxSceneSize)) return false;
             double dwidth;
             if ((dwidth = IsCorectDoubleNumberFormat("Width", width)) == -1) return false;
-            if (!IsCorectDoubleNumber("Width", dwidth, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("Width", dwidth, -maxSceneSize, maxSceneSize)) return false;
 
             double dheight;
             if ((dheight = IsCorectDoubleNumberFormat("Height", height)) == -1) return false;
-            if (!IsCorectDoubleNumber("Height", dheight, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("Height", dheight, -maxSceneSize, maxSceneSize)) return false;
 
             double ddepth;
             if ((ddepth = IsCorectDoubleNumberFormat("Depth", depth)) == -1) return false;
-            if (!IsCorectDoubleNumber("Depth", ddepth, -3840, 3840)) return false;
+            if (!IsCorectDoubleNumber("Depth", ddepth, -maxSceneSize, maxSceneSize)) return false;
 
             if (color == null) return false;
               
@@ -228,19 +272,19 @@ namespace RayTracerGUI.Controlers
 
             double x = 0;
             if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
-            if (!IsCorectDoubleNumber("X", x, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("X", x, -maxSceneSize, maxSceneSize)) return false;
 
             double y = 0;
             if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
-            if (!IsCorectDoubleNumber("Y", y, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("Y", y, -maxSceneSize, maxSceneSize)) return false;
 
             double z = 0;
             if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
-            if (!IsCorectDoubleNumber("Z", z, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("Z", z, -maxSceneSize, maxSceneSize)) return false;
 
             double sangle = 0;
-            if ((z = IsCorectDoubleNumberFormat("Angle", angle)) == -1) return false;
-            if (!IsCorectDoubleNumber("Angle", sangle, 0, 3840)) return false;
+            if ((sangle = IsCorectDoubleNumberFormat("Angle", angle)) == -1) return false;
+            if (!IsCorectDoubleNumber("Angle", sangle, -maxSceneSize, maxSceneSize)) return false;
 
 
             Scene.Camera = Camera.LookAt(new Vector(x, y, z), new Vector(), aspect, sangle);
@@ -261,19 +305,19 @@ namespace RayTracerGUI.Controlers
             
             double x = 0;
             if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
-            if (!IsCorectDoubleNumber("X", x, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("X", x, -maxSceneSize, maxSceneSize)) return false;
 
             double y = 0;
             if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
-            if (!IsCorectDoubleNumber("Y", y, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("Y", y, -maxSceneSize, maxSceneSize)) return false;
 
             double z = 0;
             if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
-            if (!IsCorectDoubleNumber("Z", z, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("Z", z, -maxSceneSize, maxSceneSize)) return false;
 
             double dradius;
             if ((dradius = IsCorectDoubleNumberFormat("Radius", radius)) == -1) return false;
-            if (!IsCorectDoubleNumber("Width", dradius, 0, 3840)) return false;
+            if (!IsCorectDoubleNumber("Width", dradius, -maxSceneSize, maxSceneSize)) return false;
             
             if (color == null) return false;
 

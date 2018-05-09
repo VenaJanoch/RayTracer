@@ -28,9 +28,9 @@ namespace RayTracerGUI.Controlers
 
         public ImageControler(Scene scene)
         {
-            InputFormControler inputFormControler = new InputFormControler(scene, this);
+            InputFormControler = new InputFormControler(scene, this);
             Scene = scene;
-            InitWindow = new InitWindow(this, inputFormControler);
+            InitWindow = new InitWindow(this, InputFormControler);
             FileManipulator = new FileManipulator(scene);
             RenderManager = new RenderManager(scene, FileManipulator);
 
@@ -40,7 +40,7 @@ namespace RayTracerGUI.Controlers
         {
             Scene.Camera.eye.X = x;
             Scene.Camera.eye.Y = y;
-
+            
             var th = new Thread(new ThreadStart(RenderManager.RenderingPicture));
 
             th.IsBackground = true;
@@ -55,6 +55,11 @@ namespace RayTracerGUI.Controlers
         {
             if (File.Exists(Scene.imageOutputFilePath))
             {
+                if(Scene.Image == null)
+                {
+                    Scene.Image = (Bitmap)Image.FromFile(Scene.imageOutputFilePath);
+                    
+                }
                 return true;
             }
             return false;
@@ -78,6 +83,53 @@ namespace RayTracerGUI.Controlers
         internal void RepaintCanvas()
         {
             InitWindow.RepaintCanvas();
+        }
+
+        internal bool AddCuboidToSceneControl()
+        {
+            if(Scene.Shapes != null)
+            {
+               Cuboid c = new Cuboid(new Material(new Vector(0, 0, 0)), new Vector(1.5, -1.5, 0), 1, 1, 1);
+                Scene.Shapes.Add(c);
+                Scene.shapeCount++;
+                return true;
+            }
+            return false;
+        }
+
+        internal bool AddSphereToSceneControl()
+        {
+            if (Scene.Shapes != null)
+            {
+                Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
+                Scene.Shapes.Add(s);
+                Scene.shapeCount++;
+                return true;
+            }
+            return false;
+        }
+
+        internal bool AddLightToSceneControl()
+        {
+            if (Scene.Shapes != null)
+            {
+                Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
+                Light l = new Light(s);
+                Scene.Lights.Add(l);
+                Scene.lightCount++;
+                return true;
+            }
+            return false;
+            
+
+        }
+
+        internal bool SaveSceneControl()
+        {
+            if (FileManipulator == null || Scene == null) return false;
+            
+            return FileManipulator.SaveSceneToXML(); 
+
         }
     }
 }

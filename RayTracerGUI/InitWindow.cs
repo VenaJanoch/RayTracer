@@ -44,12 +44,12 @@ namespace RayTracerGUI
             openFileDialog.Title = "Select a scene File";
 
             Stream fileStream = null;
-            //Update - remove parenthesis
+           
             if (openFileDialog.ShowDialog() == DialogResult.OK && (fileStream = openFileDialog.OpenFile()) != null)
             {
                 string fileName = openFileDialog.FileName;
                 ImageControler.FileManipulator.LoadSceneFromXML(fileName);
-             //   SetImageToImageView(ImageControler.Scene.imageOutputFilePath);
+                Show2DSceneClick(sender, e); 
             }
         }
 
@@ -64,8 +64,7 @@ namespace RayTracerGUI
             {
                 string message = "You must load or create scene ";
                 string caption = "Error Detected in scene";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBox.Show(message, caption, buttons);
+                ShowErrorMessage(message, caption);
             }
             
         }
@@ -74,15 +73,13 @@ namespace RayTracerGUI
         {
             if(ImageControler.Scene?.Camera != null)
             {
-
                 ImageControler.RenderImage(canvas2D1.Camera.Point.X, canvas2D1.Camera.Point.Y);
             }
             else
             {
                 string message = "You must load or create scene ";
                 string caption = "Error Detected in Rendering";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBox.Show(message, caption, buttons);
+                ShowErrorMessage(message, caption);
             }
             
         }
@@ -100,12 +97,17 @@ namespace RayTracerGUI
 
         private void SaveSceneBT_Click(object sender, EventArgs e)
         {
-            ImageControler.FileManipulator.SaveSceneToXML();
+            if (!ImageControler.SaveSceneControl())
+            {
+                string message = "You must load or create scene ";
+                string caption = "Error Detected in Rendering";
+                ShowErrorMessage(message, caption);
+            } 
         }
 
         private void D3ViewBT_Click(object sender, EventArgs e)
         {
-            if (ImageControler.Scene?.Image != null)
+            if (ImageControler.Scene?.Image != null || ImageControler.IsAvailableImage())
             {
 
             canvas2D1.Set3DScene();
@@ -113,18 +115,28 @@ namespace RayTracerGUI
             }
             else
             {
-                string message = "You must render image for 3D view ";
-                string caption = "Error Detected in Rendering";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBox.Show(message, caption, buttons);
+                ShowErrorMessage("You must render image for 3D view ", "Error Detected in Rendering");
             }
+        }
+
+        public void ShowErrorMessage(string message, string caption)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            MessageBox.Show(message, caption, buttons);
         }
 
         private void AddCuboidBT_Click(object sender, EventArgs e)
         {
-            Cuboid c = new Cuboid(new Material(new Vector(0, 0, 0)), new Vector(1.5, -1.5, 0), 1, 1, 1);
-            ImageControler.Scene.shapes.Add(c);
-            canvas2D1.Set2DScene();
+            if(!ImageControler.AddCuboidToSceneControl())
+            {
+                ShowErrorMessage("You must choose or create sceen for add", "Error Detected in Add to Scene");
+            }
+            else
+            {
+            RepaintCanvas();        
+
+            }
+
 
         }
 
@@ -133,19 +145,37 @@ namespace RayTracerGUI
             canvas2D1.Invalidate();
         }
 
-        private void sphareBT_Click(object sender, EventArgs e)
+        private void SphareBT_Click(object sender, EventArgs e)
         {
-            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
-            ImageControler.Scene.shapes.Add(s);
-            canvas2D1.Set2DScene();
+            if (!ImageControler.AddSphereToSceneControl())
+            {
+                ShowErrorMessage("You must choose or create sceen for add", "Error Detected in Add to Scene");
+            }
+            else
+            {
+                RepaintCanvas();
+
+            }
         }
 
-        private void lightBT_Click(object sender, EventArgs e)
+        private void LightBT_Click(object sender, EventArgs e)
         {
-            Sphere s = new Sphere(new Material(new Vector(0, 0, 0)), new Vector(new Vector(1.5, -1.5, 0)), 1);
-            Light l = new Light(s);
-            ImageControler.Scene.lights.Add(l);
-            canvas2D1.Set2DScene();
+            if (!ImageControler.AddLightToSceneControl())
+            {
+                ShowErrorMessage("You must choose or create sceen for add", "Error Detected in Add to Scene");
+            }
+            else
+            {
+                RepaintCanvas();
+
+            }
+      
+        }
+
+        private void CreateOwnSceneBT_Click(object sender, EventArgs e)
+        {
+            var ownScene = new OwnSceneWindow(this, InputControler, ImageControler);
+            ownScene.Show();
         }
     }
 }

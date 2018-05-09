@@ -25,22 +25,22 @@ namespace RayTracer
         {
             string outputText = scene.GetInfo();
 
-            if (scene.shapes != null)
+            if (scene.Shapes != null)
             {
 
                 for (int i = 0; i < scene.shapeCount; i++)
                 {
-                    outputText += scene.shapes[i].ToString();
+                    outputText += scene.Shapes[i].ToString();
 
                 }
             }
 
-            if (scene.lights != null)
+            if (scene.Lights != null)
             {
 
                 for (int i = 0; i < scene.lightCount; i++)
                 {
-                    outputText += scene.lights[i].ToString();
+                    outputText += scene.Lights[i].ToString();
 
                 }
             }
@@ -145,16 +145,16 @@ namespace RayTracer
                 sceneNode.SelectNodes("light");
 
 
-            scene.shapes = new List<Shape>();
+            scene.Shapes = new List<Shape>();
             for (int i = 0; i <= shapeNodeList.Count - 1; i++)
             {
-               scene.shapes.Add(ProcessShapeXML(shapeNodeList[i], doc));
+               scene.Shapes.Add(ProcessShapeXML(shapeNodeList[i], doc));
             }
 
-            scene.lights = new List<Light>();
+            scene.Lights = new List<Light>();
             for (int i = 0; i <= lightNodeList.Count - 1; i++)
             {
-                scene.lights.Add(ProcessLightXML(lightNodeList[i], doc));
+                scene.Lights.Add(ProcessLightXML(lightNodeList[i], doc));
             }
             
         }
@@ -251,7 +251,7 @@ namespace RayTracer
 
         private void ReadLights(StreamReader file)
         {
-            scene.lights = new List<Light>();
+            scene.Lights = new List<Light>();
 
             int i = 0;
 
@@ -264,7 +264,7 @@ namespace RayTracer
                         Shape tmpShape = ProcessSphereBodyTXT(file);
                         if(tmpShape != null)
                         {
-                        scene.lights.Add(new Light(tmpShape));
+                        scene.Lights.Add(new Light(tmpShape));
                         }
                     }
                     else
@@ -281,8 +281,11 @@ namespace RayTracer
             }
         }
 
-        public void SaveSceneToXML()
+        public bool SaveSceneToXML()
         {
+            if (scene?.Camera == null) return false;
+
+
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version='1.0'?>" +
                         "<scene>" +
@@ -311,28 +314,28 @@ namespace RayTracer
 
             doc.DocumentElement.AppendChild(cameElm);
 
-            if (scene.shapes != null)
+            if (scene.Shapes != null)
             {
 
                 for (int i = 0; i < scene.shapeCount; i++)
                 {
-                    doc.DocumentElement.AppendChild(scene.shapes[i].GetInXML(doc));
+                    doc.DocumentElement.AppendChild(scene.Shapes[i].GetInXML(doc));
                      
                 }
             }
 
-            if (scene.lights != null)
+            if (scene.Lights != null)
             {
 
                 for (int i = 0; i < scene.lightCount; i++)
                 {
-                    doc.DocumentElement.AppendChild(scene.lights[i].GetInXML(doc));
+                    doc.DocumentElement.AppendChild(scene.Lights[i].GetInXML(doc));
 
                 }
             }
       
             doc.Save(scene.sceneOutputFilePath);
-
+            return true;
             
         }
 
@@ -351,7 +354,7 @@ namespace RayTracer
             
 
             int i = 0;
-            scene.shapes = new List<Shape>();
+            scene.Shapes = new List<Shape>();
 
             while (i <= (scene.shapeCount-1)) 
             {
@@ -359,15 +362,15 @@ namespace RayTracer
               
                 if (tmp.Contains("s"))
                 {
-                    scene.shapes.Add(ProcessSphereBodyTXT(file));
+                    scene.Shapes.Add(ProcessSphereBodyTXT(file));
                 }
                 else if (tmp.Contains("c"))
                 {
-                    scene.shapes.Add(ProcessCuboidBodyTXT(file));
+                    scene.Shapes.Add(ProcessCuboidBodyTXT(file));
                 }
                 else if (tmp.Contains("p"))
                 {
-                     scene.shapes.Add(ProcessPlaneBodyTXT(file));
+                     scene.Shapes.Add(ProcessPlaneBodyTXT(file));
                 }
                 else
                 {

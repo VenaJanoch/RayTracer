@@ -22,8 +22,8 @@ namespace RayTracer
 
         public const double radius = 10.0;
 
-        public List<Shape> shapes { get; set; }
-        public List<Light> lights { get; set; } 
+        public List<Shape> Shapes { get; set; }
+        public List<Light> Lights { get; set; } 
 
         public string sceneOutputFilePath { get; set; }
         public string sceneInputFilePath { get; set; }
@@ -63,20 +63,20 @@ namespace RayTracer
 
         private void CreateLights(Random random)
         {
-            lights = new List<Light>();
+            Lights = new List<Light>();
 
             for (int i = 0; i < lightCount; ++i)
             {
                 Sphere sphere = new Sphere(new Material(Vector.RandomColor),
        new Vector(0.0, 1.0, 0.0) + Vector.RandomPointInSphere(radius),
        0.5 + random.NextDouble());
-                lights.Add(new Light(sphere));
+                Lights.Add(new Light(sphere));
             }
         }
 
         private void CreateShapes(Random random)
         {
-            shapes = new List<Shape>();
+            Shapes = new List<Shape>();
 
             double width, height, depth;
             int randInt = 0;
@@ -88,7 +88,7 @@ namespace RayTracer
                 {
                    Sphere tmpS = new Sphere(new Material(Vector.RandomColor),
                         Vector.RandomPointInSphere(radius), 0.5 + random.NextDouble());
-                    shapes.Add(tmpS);
+                    Shapes.Add(tmpS);
                 }
                 else if(randInt == 1)
                 {
@@ -100,7 +100,7 @@ namespace RayTracer
                    Cuboid c = new Cuboid(new Material(Vector.RandomColor),
                         Vector.RandomPointInCuboid(width, height, depth), width,
                         height, depth);
-                    shapes.Add(c);
+                    Shapes.Add(c);
                 }
                 /*else
                 {
@@ -172,7 +172,7 @@ namespace RayTracer
 
             Vector totalColor = ambientColor;
 
-            foreach (Light light in lights)
+            foreach (Light light in Lights)
             {
                 Vector diffuseColorSum = new Vector();
 
@@ -211,7 +211,7 @@ namespace RayTracer
         {
             Intersection nearestHit = new Intersection();
 
-            foreach (Shape shape in shapes)
+            foreach (Shape shape in Shapes)
             {
                 Intersection currentTry = shape.Intersect(ray);
 
@@ -228,7 +228,7 @@ namespace RayTracer
         {
             Intersection nearestHit = new Intersection();
 
-            foreach (Light light in lights)
+            foreach (Light light in Lights)
             {
                 Intersection currentTry = light.Shape.Intersect(ray);
 
@@ -257,9 +257,9 @@ namespace RayTracer
         public void ClearScene()
         {
 
-            shapes = null;
+            Shapes = null;
 
-            lights = null;
+            Lights = null;
 
             sceneOutputFilePath = "";
 
