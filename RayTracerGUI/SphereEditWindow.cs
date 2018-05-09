@@ -61,8 +61,10 @@ namespace RayTracerGUI
 
         private void SaveBTEdit_Click(object sender, EventArgs e)
         {
-            inputFormControler.UpdateSphere(sphere, CoordXTB.Text, CoordYTB.Text, CoordYTB.Text, RadiusTB.Text, colorDialog1.Color);
+            if(inputFormControler.UpdateSphere(sphere, CoordXTB.Text, CoordYTB.Text, CoordYTB.Text, RadiusTB.Text, colorDialog1.Color))
+            {
             Close();
+            }
         }
 
       

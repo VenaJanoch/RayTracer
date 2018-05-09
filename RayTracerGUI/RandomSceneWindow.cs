@@ -37,26 +37,14 @@ namespace RayTracerGUI
         private void saveBt_Click(object sender, EventArgs e)
         {
 
-            string sceneOutputFilePath = sceneOutput.Text;
-            string imageOutputFilePath = imageOutput.Text;
-
-            int screenWidth = Int32.Parse(sceneWidth.Text);
-            int screenHeight = Int32.Parse(sceneHeight.Text);
-            int superSamples = Int32.Parse(this.superSamples.Text);
-            int shapeCount = Int32.Parse(this.shapeCount.Text);
-            int lightCount = Int32.Parse(this.lightCount.Text);
-            int lightSamples = Int32.Parse(this.lightSamples.Text);
-            int indirectLightSamples = Int32.Parse(this.indirectLightSamples.Text);
-            int maxDepth = Int32.Parse(recursionDepth.Text);
-
-            InputControler.InitScene(sceneOutputFilePath, imageOutputFilePath,
-                    screenWidth, screenHeight, superSamples, shapeCount, lightCount, lightSamples,
-                    indirectLightSamples, maxDepth);
-
-            ImageControler.FileManipulator.SaveSceneToXML();
-            
-             Close();
-            
+           if(InputControler.ControlRandomForm(sceneOutput.Text, imageOutput.Text,
+                   sceneWidth.Text, sceneHeight.Text, superSamples.Text, shapeCount.Text, lightCount.Text, lightSamples.Text,
+                    indirectLightSamples.Text, recursionDepth.Text))
+            {
+                ImageControler.FileManipulator.SaveSceneToXML();
+                Close();
+            }
+                        
         }
 
         private void sceneOutputBT_Click(object sender, EventArgs e)

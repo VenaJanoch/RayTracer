@@ -40,8 +40,10 @@ namespace RayTracerGUI
     
         private void SaveBTEdit_Click(object sender, EventArgs e)
         {
-            inputFormControler.UpdateCamera(CoordXTB.Text, CoordYTB.Text, CoordZTB.Text, AngleTB.Text);
+            if(inputFormControler.UpdateCamera(CoordXTB.Text, CoordYTB.Text, CoordZTB.Text, AngleTB.Text))
+            {
             Close();
+            }
         }
     }
 }

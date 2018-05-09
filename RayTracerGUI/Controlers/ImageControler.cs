@@ -62,7 +62,17 @@ namespace RayTracerGUI.Controlers
 
         internal void StopRenderingImage()
         {
-            RenderManager.StopRenderingImage();
+            if (RenderManager.Rendering)
+            {
+                RenderManager.StopRenderingImage();
+            }
+            else
+            {
+                string message = "Image is not rendering ";
+                string caption = "Error Detected in stop rendering";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
         }
 
         internal void RepaintCanvas()

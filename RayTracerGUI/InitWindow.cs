@@ -55,17 +55,41 @@ namespace RayTracerGUI
 
         private void Show2DSceneClick(object sender, EventArgs e)
         {
-            canvas2D1.SetCame();
-            canvas2D1.Set2DScene();
+            if(ImageControler.Scene?.Camera != null)
+            {
+                canvas2D1.SetCame();
+                canvas2D1.Set2DScene();
+            }
+            else
+            {
+                string message = "You must load or create scene ";
+                string caption = "Error Detected in scene";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
+            
         }
 
         private void StartRenderingBT_Click(object sender, EventArgs e)
         {
-            ImageControler.RenderImage(canvas2D1.Camera.Point.X, canvas2D1.Camera.Point.Y);
+            if(ImageControler.Scene?.Camera != null)
+            {
+
+                ImageControler.RenderImage(canvas2D1.Camera.Point.X, canvas2D1.Camera.Point.Y);
+            }
+            else
+            {
+                string message = "You must load or create scene ";
+                string caption = "Error Detected in Rendering";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
+            
         }
 
         private void StopRenderingBT_Click(object sender, EventArgs e)
         {
+
             ImageControler.StopRenderingImage();
         }
 
@@ -81,7 +105,19 @@ namespace RayTracerGUI
 
         private void D3ViewBT_Click(object sender, EventArgs e)
         {
+            if (ImageControler.Scene?.Image != null)
+            {
+
             canvas2D1.Set3DScene();
+
+            }
+            else
+            {
+                string message = "You must render image for 3D view ";
+                string caption = "Error Detected in Rendering";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
         }
 
         private void AddCuboidBT_Click(object sender, EventArgs e)

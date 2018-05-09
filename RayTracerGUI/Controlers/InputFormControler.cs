@@ -23,10 +23,130 @@ namespace RayTracerGUI.Controlers
             this.imageControler = imageControler;
         }
 
-        public void ControlRandomForm(String outputFile, String imgFile, String width, String height,
+        public bool ControlRandomForm(String outputFile, String imgFile, String width, String height,
            String superSamples, String shapeCount, String lightCount, String lightSamples, String indirectLightSamples, String maxDepth)
         {
-      //      if(outputFile == null || imgFile == null ||)
+            if (!IsCorectField("Output scene file", outputFile)) return false;
+            if (!IsCorectField("Output image file", imgFile)) return false;
+            if (!IsCorectField("Scene width", width)) return false;
+            if (!IsCorectField("Scene height", height)) return false;
+            if (!IsCorectField("superSamples", superSamples)) return false;
+            if (!IsCorectField("shapeCount", shapeCount)) return false;
+            if (!IsCorectField("lightCount", lightCount)) return false;
+            if (!IsCorectField("lightSamples", lightSamples)) return false;
+            if (!IsCorectField("indirectLightSamples", indirectLightSamples)) return false;
+            if (!IsCorectField("maxDepth", maxDepth)) return false;
+
+            int screenWidth;
+            if ((screenWidth = IsCorectIntNumberFormat("Scene width", width))  == -1) return false;
+            if (!IsCorectIntNumber("Scene width", screenWidth, 3840, 1)) return false;
+
+            int screenHeight;
+            if ((screenHeight = IsCorectIntNumberFormat("Scene height", height)) == -1) return false;
+            if (!IsCorectIntNumber("Scene height", screenHeight, 3840, 1)) return false;
+
+            int iSuperSamples = Int32.Parse(superSamples);
+            if ((iSuperSamples = IsCorectIntNumberFormat("Super Samples", superSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Super Samples", iSuperSamples, 8, 1)) return false;
+
+            int iShapeCount;
+            if ((iShapeCount = IsCorectIntNumberFormat("Shape count", shapeCount)) == -1) return false;
+            if (!IsCorectIntNumber("Shape count", iShapeCount, 1, 20)) return false;
+
+            int iLightCount;
+            if ((iLightCount = IsCorectIntNumberFormat("Light count", lightCount)) == -1) return false;
+            if (!IsCorectIntNumber("Light count", iLightCount, 1, 20)) return false;
+
+            int iLightSamples;
+            if ((iLightSamples = IsCorectIntNumberFormat("Light Samples", lightSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Light samples", iLightSamples, 1, 128)) return false;
+
+            int iIndirectLightSamples;
+            if ((iIndirectLightSamples = IsCorectIntNumberFormat("Indirect light samples", indirectLightSamples)) == -1) return false;
+            if (!IsCorectIntNumber("Indirect light samples", iLightSamples, 1, 128)) return false;
+
+            int iMaxDepth;
+            if ((iMaxDepth = IsCorectIntNumberFormat("Max recursion depth", maxDepth)) == -1) return false;
+            if (!IsCorectIntNumber("Max recursion depth", screenWidth, 0, 10)) return false;
+
+            InitScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, iShapeCount,
+                iLightSamples, iLightSamples, iIndirectLightSamples, iMaxDepth);
+
+            return true;  
+        }
+
+        public Double IsCorectDoubleNumberFormat(string fieldName, string value)
+        {
+            try
+            {
+            return Double.Parse(value);
+            }
+            catch (FormatException)
+            {
+                string message = "You do not fill number to " + fieldName;
+                string caption = "Error Detected in Input";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+                return -1;
+            }
+
+        }
+
+
+        public int IsCorectIntNumberFormat(string fieldName, string value)
+        {
+            try
+            {
+                return Int32.Parse(value);
+            }
+            catch (FormatException)
+            {
+                string message = "You do not fill number to " + fieldName;
+                string caption = "Error Detected in Input";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+                return -1;
+            }
+
+        }
+
+        public bool IsCorectField(string fieldName, string field)
+        {
+            if ((field.Length == 0) || field.Contains(" "))
+            {
+                string message = "You did not enter a " + fieldName;
+                string caption = "Error Detected in Input";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+                return false;
+            }
+            return true;
+        }
+        
+        public bool IsCorectIntNumber(String fieldName, int value, int min, int max)
+        {
+            if(value > max || value < min)
+            {
+                string message = "You did not enter value in " + fieldName;
+                string caption = "Error Detected in Input";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+                return false;
+            }
+            return true;
+        }
+
+        public bool IsCorectDoubleNumber(String fieldName, double value, double min, double max)
+        {
+            if (value > max || value < min)
+            {
+                string message = "You did not enter value in " + fieldName;
+                string caption = "Error Detected in Input";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+                return false;
+            }
+            return true;
         }
 
         internal void InitScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples, int indirectLightSamples, int maxDepth)
@@ -42,57 +162,137 @@ namespace RayTracerGUI.Controlers
 
         }
 
-        internal void UpdateCuboid(Cuboid cuboid, string coordX, string coordY,
+        internal bool UpdateCuboid(Cuboid cuboid, string coordX, string coordY,
             string coordZ, string width, string height, string depth, Color color)
         {
-            cuboid.Point.X = Double.Parse(coordX);
-            cuboid.Point.Y = Double.Parse(coordY);
-            cuboid.Point.Z = Double.Parse(coordZ);
+            if (!IsCorectField("X", coordX)) return false;
+            if (!IsCorectField("Y", coordY)) return false;
+            if (!IsCorectField("Z", coordZ)) return false;
+            if (!IsCorectField("Width", width)) return false;
+            if (!IsCorectField("Height", height)) return false;
+            if (!IsCorectField("Depth", depth)) return false;
 
-            cuboid.Width = Double.Parse(width);
-            cuboid.Height = Double.Parse(height);
-            cuboid.Depth = Double.Parse(depth);
+            double x = 0;
+            if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
+            if (!IsCorectDoubleNumber("X", x, -3840, 3840)) return false;
 
+            double y = 0;
+            if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
+            if (!IsCorectDoubleNumber("Y", y, -3840, 3840)) return false;
+
+            double z = 0;
+            if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
+            if (!IsCorectDoubleNumber("Z", z, -3840, 3840)) return false;
+            double dwidth;
+            if ((dwidth = IsCorectDoubleNumberFormat("Width", width)) == -1) return false;
+            if (!IsCorectDoubleNumber("Width", dwidth, -3840, 3840)) return false;
+
+            double dheight;
+            if ((dheight = IsCorectDoubleNumberFormat("Height", height)) == -1) return false;
+            if (!IsCorectDoubleNumber("Height", dheight, -3840, 3840)) return false;
+
+            double ddepth;
+            if ((ddepth = IsCorectDoubleNumberFormat("Depth", depth)) == -1) return false;
+            if (!IsCorectDoubleNumber("Depth", ddepth, -3840, 3840)) return false;
+
+            if (color == null) return false;
+              
             double r = (int)color.R / 255;
             double g = (int)color.G / 255;
             double b = (int)color.B / 255;
-
 
             cuboid.Material.Color.X = r;
             cuboid.Material.Color.Y = g;
             cuboid.Material.Color.Z = b;
+            cuboid.Depth = ddepth;
+            cuboid.Height = dheight;
+            cuboid.Width = dwidth;
+            cuboid.Point.Z = z;
+            cuboid.Point.Y = y;
+            cuboid.Point.X = x;
+
+            imageControler.RepaintCanvas();
+
+            return true;
         }
 
-        internal void UpdateCamera(string coordX, string coordY, string coordZ, string angle)
+        internal bool UpdateCamera(string coordX, string coordY, string coordZ, string angle)
         {
             double aspect = (Scene.screenWidth / Scene.screenHeight);
 
-            double x = Double.Parse(coordX);
-            double y = Double.Parse(coordY);
-            double z = Double.Parse(coordZ);
+            if (!IsCorectField("X", coordX)) return false;
+            if (!IsCorectField("Y", coordY)) return false;
+            if (!IsCorectField("Z", coordZ)) return false;
+            if (!IsCorectField("angle", angle)) return false;
 
-            Scene.Camera = Camera.LookAt(new Vector(x, y, z), new Vector(), aspect, Double.Parse(angle));
+
+            double x = 0;
+            if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
+            if (!IsCorectDoubleNumber("X", x, 0, 3840)) return false;
+
+            double y = 0;
+            if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
+            if (!IsCorectDoubleNumber("Y", y, 0, 3840)) return false;
+
+            double z = 0;
+            if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
+            if (!IsCorectDoubleNumber("Z", z, 0, 3840)) return false;
+
+            double sangle = 0;
+            if ((z = IsCorectDoubleNumberFormat("Angle", angle)) == -1) return false;
+            if (!IsCorectDoubleNumber("Angle", sangle, 0, 3840)) return false;
+
+
+            Scene.Camera = Camera.LookAt(new Vector(x, y, z), new Vector(), aspect, sangle);
+
+            imageControler.RepaintCanvas();
+
+            return true;
         }
 
-        internal void UpdateSphere(Sphere sphere, string coordX, string coordY,
+        internal bool UpdateSphere(Sphere sphere, string coordX, string coordY,
             string coordZ, string radius, Color color)
         {
-            sphere.Point.X = Double.Parse(coordX);
-            sphere.Point.Y = Double.Parse(coordY);
-            sphere.Point.Z = Double.Parse(coordZ);
 
-            sphere.Radius = Double.Parse(radius);
+            if (!IsCorectField("X", coordX)) return false;
+            if (!IsCorectField("Y", coordY)) return false;
+            if (!IsCorectField("Z", coordZ)) return false;
+            if (!IsCorectField("Radius", radius)) return false;
             
+            double x = 0;
+            if ((x = IsCorectDoubleNumberFormat("X", coordX)) == -1) return false;
+            if (!IsCorectDoubleNumber("X", x, 0, 3840)) return false;
+
+            double y = 0;
+            if ((y = IsCorectDoubleNumberFormat("Y", coordY)) == -1) return false;
+            if (!IsCorectDoubleNumber("Y", y, 0, 3840)) return false;
+
+            double z = 0;
+            if ((z = IsCorectDoubleNumberFormat("Z", coordZ)) == -1) return false;
+            if (!IsCorectDoubleNumber("Z", z, 0, 3840)) return false;
+
+            double dradius;
+            if ((dradius = IsCorectDoubleNumberFormat("Radius", radius)) == -1) return false;
+            if (!IsCorectDoubleNumber("Width", dradius, 0, 3840)) return false;
+            
+            if (color == null) return false;
+
             double r = (int)color.R / 255;
             double g = (int)color.G / 255;
             double b = (int)color.B / 255;
-
 
             sphere.Material.Color.X = r;
             sphere.Material.Color.Y = g;
             sphere.Material.Color.Z = b;
 
+            sphere.Radius = dradius;
+            
+            sphere.Point.X = x;
+            sphere.Point.Y = y;
+            sphere.Point.Z = z;
+ 
             imageControler.RepaintCanvas();
+            return true;
         }
     }
        

@@ -55,8 +55,10 @@ namespace RayTracerGUI
 
         private void SaveBTEdit_Click(object sender, EventArgs e)
         {
-            inputFormControler.UpdateCuboid(cuboid, CoordXTB.Text, CoordYTB.Text, CoordZTB.Text, WidthTB.Text, HeightTB.Text, DepthTB.Text, colorDialog1.Color);
+           if(inputFormControler.UpdateCuboid(cuboid, CoordXTB.Text, CoordYTB.Text, CoordZTB.Text, WidthTB.Text, HeightTB.Text, DepthTB.Text, colorDialog1.Color))
+            {
             Close();
+            }
         }
     }
 }
