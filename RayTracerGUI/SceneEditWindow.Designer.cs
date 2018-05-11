@@ -1,6 +1,6 @@
 ﻿namespace RayTracerGUI
 {
-    partial class OwnSceneWindow
+    partial class SceneEditWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -75,7 +75,7 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(115, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // sceneOutput
@@ -233,7 +233,7 @@
             this.saveRandomSceneBT.TabIndex = 23;
             this.saveRandomSceneBT.Text = "Save";
             this.saveRandomSceneBT.UseVisualStyleBackColor = true;
-            this.saveRandomSceneBT.Click += new System.EventHandler(this.SaveOwnSceneBT_Click);
+            this.saveRandomSceneBT.Click += new System.EventHandler(this.EditSceneBT_Click);
             // 
             // OwnSceneWindow
             // 
@@ -262,8 +262,7 @@
             this.Controls.Add(this.menu);
             this.MainMenuStrip = this.menu;
             this.Name = "OwnSceneWindow";
-            this.RightToLeftLayout = true;
-            this.Text = "Own scene window";
+            this.Text = "Random scene window";
             this.Load += new System.EventHandler(this.SceneWindow_Load);
             this.Click += new System.EventHandler(this.imgOutputBT_Click);
             this.menu.ResumeLayout(false);

@@ -56,6 +56,12 @@
     <Compile Include="CameraEditWindow.Designer.cs">
       <DependentUpon>CameraEditWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="SceneEditWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SceneEditWindow.Designer.cs">
+      <DependentUpon>SceneEditWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="OwnSceneWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CameraEditWindow.resx">
       <DependentUpon>CameraEditWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SceneEditWindow.resx">
+      <DependentUpon>SceneEditWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OwnSceneWindow.resx">
       <DependentUpon>OwnSceneWindow.cs</DependentUpon>

@@ -78,7 +78,7 @@ namespace RayTracerGUI.Controlers
         }
 
         internal bool ControlOwnForm(String outputFile, String imgFile, String width, String height,
-           String superSamples, String lightSamples, String indirectLightSamples, String maxDepth)
+           String superSamples, String lightSamples, String indirectLightSamples, String maxDepth, bool isEdit)
         {
             if (!IsCorectField("Output scene file", outputFile)) return false;
             if (!IsCorectField("Output image file", imgFile)) return false;
@@ -113,7 +113,14 @@ namespace RayTracerGUI.Controlers
             if ((iMaxDepth = IsCorectIntNumberFormat("Max recursion depth", maxDepth)) == -1) return false;
             if (!IsCorectIntNumber("Max recursion depth", iMaxDepth, 0, 10)) return false;
 
-            InitScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, 0, 0, iLightSamples, iIndirectLightSamples, iMaxDepth);
+            if (!isEdit)
+            {
+                InitScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, 0, 0, iLightSamples, iIndirectLightSamples, iMaxDepth);
+            }
+            else
+            {
+                EditScene(outputFile, imgFile, screenWidth, screenHeight, iSuperSamples, iLightSamples, iIndirectLightSamples, iMaxDepth);
+            }
 
             return true;
         }
@@ -201,9 +208,14 @@ namespace RayTracerGUI.Controlers
 
             double aspect = (Scene.screenWidth / Scene.screenHeight);
             Scene.Camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
+        }
 
-
-
+        internal void EditScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth,
+            int screenHeight, int superSamples,  int lightSamples, int indirectLightSamples, int maxDepth)
+        {
+            Scene.FillStaticInfo(sceneOutputFilePath, imageOutputFilePath,
+                            screenWidth, screenHeight, superSamples, lightSamples,
+                            indirectLightSamples, maxDepth);
         }
 
         internal bool UpdateCuboid(Cuboid cuboid, string coordX, string coordY,

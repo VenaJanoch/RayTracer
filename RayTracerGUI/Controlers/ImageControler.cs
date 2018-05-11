@@ -40,7 +40,7 @@ namespace RayTracerGUI.Controlers
         {
             Scene.Camera.eye.X = x;
             Scene.Camera.eye.Y = y;
-            
+            InitWindow.SetRenderingStatus();
             var th = new Thread(new ThreadStart(RenderManager.RenderingPicture));
 
             th.IsBackground = true;
@@ -63,6 +63,13 @@ namespace RayTracerGUI.Controlers
                 return true;
             }
             return false;
+        }
+
+        internal void LoadSceneFromFile(string fileName)
+        {
+            
+            FileManipulator.LoadSceneFromXML(fileName);
+            Scene.IsLoad= true;
         }
 
         internal void StopRenderingImage()
@@ -130,6 +137,16 @@ namespace RayTracerGUI.Controlers
             
             return FileManipulator.SaveSceneToXML(); 
 
+        }
+
+        internal bool IsLoadScene()
+        {
+            if (!Scene.IsLoad)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

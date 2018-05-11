@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace RayTracerGUI
 {
-    public partial class OwnSceneWindow : Form
+    public partial class SceneEditWindow : Form
     {
 
         private InitWindow initWindow;
@@ -20,29 +20,42 @@ namespace RayTracerGUI
 
         private ImageControler ImageControler { get; set; }
 
-        public OwnSceneWindow(InitWindow initWindow, InputFormControler inputControler, ImageControler imageControler)
+        public SceneEditWindow(InitWindow initWindow, InputFormControler inputControler, ImageControler imageControler)
         {
             InputControler = inputControler;
             ImageControler = imageControler;
             this.initWindow = initWindow;
 
             InitializeComponent();
+            SetDataToComponets();
         }
+
+        private void SetDataToComponets()
+        {
+            sceneOutput.Text = ImageControler.Scene.sceneOutputFilePath;
+            imageOutput.Text = ImageControler.Scene.imageOutputFilePath;
+            sceneWidth.Text = ImageControler.Scene.screenWidth.ToString();
+            sceneHeight.Text = ImageControler.Scene.screenHeight.ToString();
+            superSamples.Text = ImageControler.Scene.superSamples.ToString();
+            lightSamples.Text = ImageControler.Scene.lightSamples.ToString();
+            indirectLightSamples.Text  = ImageControler.Scene.indirectLightSamples.ToString();
+            recursionDepth.Text = ImageControler.Scene.maxDepth.ToString();
+
+        }
+
 
         private void SceneWindow_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void SaveOwnSceneBT_Click(object sender, EventArgs e)
+        private void EditSceneBT_Click(object sender, EventArgs e)
         {
 
            if(InputControler.ControlOwnForm(sceneOutput.Text, imageOutput.Text,
                    sceneWidth.Text, sceneHeight.Text, superSamples.Text, lightSamples.Text,
-                    indirectLightSamples.Text, recursionDepth.Text, false))
-            {
-                ImageControler.FileManipulator.SaveSceneToXML();
-                
+                    indirectLightSamples.Text, recursionDepth.Text, true))
+            {  
                 Close();
             }
                         

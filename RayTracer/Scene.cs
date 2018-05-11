@@ -18,6 +18,8 @@ namespace RayTracer
         private const double AmbientLight = 0.60;
         private const double Reflectivity = 0.30;
 
+        public bool IsLoad { get; set; } = false;
+
         public Bitmap Image { get; set; }
 
         public const double radius = 10.0;
@@ -43,22 +45,35 @@ namespace RayTracer
             int indirectLightSamples, int maxDepth)
         {
 
-            this.sceneOutputFilePath = sceneOutputFilePath;
-            this.imageOutputFilePath = imageOutputFilePath;
-            this.screenWidth = screenWidth;
-            this.screenHeight =  screenHeight;
-            this.superSamples = superSamples;
+            FillStaticInfo(sceneOutputFilePath, imageOutputFilePath,
+            screenWidth, screenHeight, superSamples, lightSamples,
+            indirectLightSamples, maxDepth);
+
             this.shapeCount = shapeCount;
             this.lightCount = lightCount;
-            this.lightSamples = lightSamples;
-            this.indirectLightSamples = indirectLightSamples;
-            this.maxDepth = maxDepth;
-            
+
             Random random = new Random();
 
             CreateShapes(random);
             CreateLights(random);
+
+            IsLoad = true;
             
+        }
+
+        public void  FillStaticInfo(string sceneOutputFilePath, string imageOutputFilePath,
+            int screenWidth, int screenHeight, int superSamples, int lightSamples,
+            int indirectLightSamples, int maxDepth)
+        {
+            this.sceneOutputFilePath = sceneOutputFilePath;
+            this.imageOutputFilePath = imageOutputFilePath;
+            this.screenWidth = screenWidth;
+            this.screenHeight = screenHeight;
+            this.superSamples = superSamples;
+            this.lightSamples = lightSamples;
+            this.indirectLightSamples = indirectLightSamples;
+            this.maxDepth = maxDepth;
+
         }
 
         private void CreateLights(Random random)
@@ -285,8 +300,6 @@ namespace RayTracer
 
 
         }
-
-
     }
     
 }

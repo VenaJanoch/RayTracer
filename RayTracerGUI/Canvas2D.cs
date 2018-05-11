@@ -15,7 +15,7 @@ namespace RayTracerGUI
         public ImageControler ImageControler { get; set; }
         public InputFormControler InputFormControler { get; set; }
 
-        private Boolean scene2D;
+        private short scene2D;
 
         private Shape moveShape;
 
@@ -31,25 +31,34 @@ namespace RayTracerGUI
         {
             DoubleBuffered = true;
             ResizeRedraw = true;
+            BackColor = Color.AliceBlue;
             
         }
 
 
         public void Set2DScene()
         {
-            scene2D = true;
+            scene2D = 1;
             Invalidate();
         }
 
         public void Set3DScene()
         {
-            scene2D = false;
+            scene2D = 2;
+            Invalidate();
+        }
+
+        public void SetRenderingStatus()
+        {
+            scene2D = 3;
             Invalidate();
         }
 
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             base.OnMouseDoubleClick(e);
+
+            if (ImageControler.Scene?.Shapes == null) return;
 
             foreach (Shape shape in ImageControler.Scene.Shapes)
             {
@@ -173,6 +182,9 @@ namespace RayTracerGUI
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+
+            if (ImageControler.Scene?.Shapes == null) return ;
+
             foreach (Shape shape in ImageControler.Scene.Shapes)
             {
                 if (ShapeMouseDownControl(e, shape))
@@ -249,7 +261,7 @@ namespace RayTracerGUI
             base.OnPaint(e);
             if (ImageControler == null) return;
 
-            if (scene2D)
+            if (scene2D == 1)
             {
 
                 foreach (Shape shape in ImageControler.Scene.Shapes)
@@ -271,10 +283,14 @@ namespace RayTracerGUI
                 }
 
             }
-            else
+            else if(scene2D == 2)
             {
                 if (ImageControler.Scene?.Image == null) return;
-                e.Graphics.DrawImage(ImageControler.Scene.Image, new Point(0, 0));
+                e.Graphics.DrawImage(ImageControler.Scene.Image, new Point(Width/2-(ImageControler.Scene.Image.Width/2), Height/2 - (ImageControler.Scene.Image.Height / 2)));
+            }
+            else if (scene2D == 3)
+            {
+                e.Graphics.DrawString("Your picture is rendering", DefaultFont, Brushes.Bisque, new Point(Width/2 - 100, Height/2));
             }
 
 
