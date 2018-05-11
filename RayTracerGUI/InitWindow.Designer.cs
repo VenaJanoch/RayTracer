@@ -90,6 +90,7 @@
             // 
             // SaveSceneBT
             // 
+            this.SaveSceneBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveSceneBT.Location = new System.Drawing.Point(715, 46);
             this.SaveSceneBT.Name = "SaveSceneBT";
             this.SaveSceneBT.Size = new System.Drawing.Size(162, 34);

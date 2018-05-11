@@ -336,9 +336,10 @@ namespace RayTracerGUI.Controlers
             
             if (color == null) return false;
 
-            double r = color.R / 255;
-            double g = color.G / 255;
-            double b = color.B / 255;
+            double r = (color.R / 255.0);
+            double g = (color.G / 255.0);
+            double b = (color.B / 255.0);
+
 
             sphere.Material.Color.X = r;
             sphere.Material.Color.Y = g;
