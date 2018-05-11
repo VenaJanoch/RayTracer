@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
-
+using RayTracerGUI.Controlers;
 
 namespace RayTracer
 {
@@ -11,13 +11,15 @@ namespace RayTracer
 
         private Scene scene;
         private FileManipulator fileManipulator;
+        ImageControler imageControler;
         public bool Rendering { get; set; }
 
 
-        public RenderManager(Scene scene, FileManipulator fileManipulator)
+        public RenderManager(Scene scene, FileManipulator fileManipulator, ImageControler imageControler)
         {
             this.scene = scene;
             this.fileManipulator = fileManipulator;
+            this.imageControler = imageControler;
         }
 
 
@@ -78,7 +80,8 @@ namespace RayTracer
 
             image.Save(scene.imageOutputFilePath, ImageFormat.Png);
             scene.Image = image;
-           
+            imageControler.InitWindow.SetCanvasAfterRendering();
+            Rendering = false;
 
             Console.WriteLine("Done!");           
         }

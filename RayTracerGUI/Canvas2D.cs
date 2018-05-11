@@ -290,7 +290,7 @@ namespace RayTracerGUI
             }
             else if (scene2D == 3)
             {
-                e.Graphics.DrawString("Your picture is rendering", DefaultFont, Brushes.Bisque, new Point(Width/2 - 100, Height/2));
+                e.Graphics.DrawString("Your picture is rendering", DefaultFont, Brushes.Red, new Point(Width/2 - 100, Height/2));
             }
 
 

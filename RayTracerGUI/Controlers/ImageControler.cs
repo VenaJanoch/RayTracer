@@ -32,7 +32,7 @@ namespace RayTracerGUI.Controlers
             Scene = scene;
             InitWindow = new InitWindow(this, InputFormControler);
             FileManipulator = new FileManipulator(scene);
-            RenderManager = new RenderManager(scene, FileManipulator);
+            RenderManager = new RenderManager(scene, FileManipulator, this);
 
         }
 

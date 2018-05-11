@@ -40,9 +40,7 @@ namespace RayTracer
                 }
             }
         }
-
-        public Cuboid Width { get; set; }
-
+        
         public abstract Intersection Intersect(Ray ray);
 
         public abstract XmlElement GetInXML(XmlDocument doc);

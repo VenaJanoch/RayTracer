@@ -20,6 +20,7 @@ namespace RayTracerGUI
         public ImageControler ImageControler { get; set; }
         public InputFormControler InputControler { get; set; }
 
+
         public InitWindow(ImageControler imageControler, InputFormControler inputControler)
         {
             ImageControler = imageControler;
@@ -63,9 +64,11 @@ namespace RayTracerGUI
         internal void SetRenderingStatus()
         {
             canvas2D1.SetRenderingStatus();
-          //  DisableScene();
+            DisableScene();
 
         }
+
+       
 
         private void DisableScene()
         {
@@ -97,25 +100,57 @@ namespace RayTracerGUI
             SaveSceneBT.Enabled = true;
         }
 
+        internal void SetCanvasAfterRendering()
+        {
+            canvas2D1.Set3DScene();
+            Invoke((MethodInvoker)delegate ()
+            {
+                EnableScene();
+            }); 
+        }
+
+        private void ShowLoadSceneDialog(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Scene Files|*.xml";
+            openFileDialog.Title = "Select a scene File";
+
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+                ImageControler.LoadSceneFromFile(fileName);
+                Show2DSceneClick(sender, e);
+            }
+
+        }
 
         private void LoadSceneButton_Click(object sender, EventArgs e)
         {
 
             if (ImageControler.IsLoadScene())
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Scene Files|*.xml";
-                openFileDialog.Title = "Select a scene File";
-
-                
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string fileName = openFileDialog.FileName;
-                    ImageControler.LoadSceneFromFile(fileName);
-                    Show2DSceneClick(sender, e);
-                }
+                ShowLoadSceneDialog(sender, e);   
             }
-            
+            else
+            {
+                string message = "You have load scene, do you want save and create new?";
+                string caption = "Exist scene";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
+                DialogResult result = MessageBox.Show(message, caption, buttons);
+
+                if (result == DialogResult.Yes)
+                {
+                    ImageControler.SaveSceneControl();
+                    ShowLoadSceneDialog(sender, e);
+                }
+                else if (result == DialogResult.No)
+                {
+                    ShowLoadSceneDialog(sender, e);
+                }
+
+            }
+
         }
 
         private void Show2DSceneClick(object sender, EventArgs e)
@@ -155,11 +190,6 @@ namespace RayTracerGUI
             ImageControler.StopRenderingImage();
         }
 
-        private void sphareToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void SaveSceneBT_Click(object sender, EventArgs e)
         {
             if (!ImageControler.SaveSceneControl())
@@ -170,13 +200,15 @@ namespace RayTracerGUI
             } 
         }
 
+        
+
         private void D3ViewBT_Click(object sender, EventArgs e)
         {
             if (ImageControler.Scene?.Image != null || ImageControler.IsAvailableImage())
             {
 
-            canvas2D1.Set3DScene();
-
+                canvas2D1.Set3DScene();
+                      
             }
             else
             {
@@ -262,9 +294,7 @@ namespace RayTracerGUI
                     var ownScene = new OwnSceneWindow(this, InputControler, ImageControler);
                     ownScene.Show();
                 }
-
-
-
+                
             }
 
 

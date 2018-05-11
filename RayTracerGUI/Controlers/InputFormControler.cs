@@ -253,13 +253,16 @@ namespace RayTracerGUI.Controlers
 
             if (color == null) return false;
               
-            double r = (int)color.R / 255;
-            double g = (int)color.G / 255;
-            double b = (int)color.B / 255;
 
+            double r = (double)(color.R / 255.0);
+            double g = (double)(color.G / 255.0);
+            double b = (double)(color.B / 255.0);
+
+            
+            
             cuboid.Material.Color.X = r;
             cuboid.Material.Color.Y = g;
-            cuboid.Material.Color.Z = b;
+            cuboid.Material.Color.Z = (b);
             cuboid.Depth = ddepth;
             cuboid.Height = dheight;
             cuboid.Width = dwidth;
@@ -333,9 +336,9 @@ namespace RayTracerGUI.Controlers
             
             if (color == null) return false;
 
-            double r = (int)color.R / 255;
-            double g = (int)color.G / 255;
-            double b = (int)color.B / 255;
+            double r = color.R / 255;
+            double g = color.G / 255;
+            double b = color.B / 255;
 
             sphere.Material.Color.X = r;
             sphere.Material.Color.Y = g;
