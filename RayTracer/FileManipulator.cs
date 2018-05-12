@@ -9,8 +9,10 @@ using System.Xml;
 
 namespace RayTracer
 {
-    /* Trida urcena pro praci s XML a TXT soubory. */
 
+    /// <summary>
+    /// Trida urcena pro praci s XML a TXT soubory.
+    /// </summary>
 
     public class FileManipulator
     {
@@ -22,10 +24,12 @@ namespace RayTracer
             this.scene = scene;
         }
 
-        /*
-         * Metoda urcena pro ulozeni sceny do klasickeho TXT 
-         * Je vyuzivano prepsanych ToString u jednotlivych objektu a statickych dat o scene
-         */
+
+
+        /// <summary>
+        /// Metoda urcena pro ulozeni sceny do klasickeho TXT
+        /// Je vyuzivano prepsanych ToString u jednotlivych objektu a statickych dat o scene
+        /// </summary>
         public void SaveSceneToTXT()
         {
             string outputText = scene.GetInfo();
@@ -55,9 +59,11 @@ namespace RayTracer
            
         }
 
-        /*
-         * Metoda urcena pro nacteni sceny z klasickeho TXT 
-         */
+        
+        /// <summary>
+        /// Metoda urcena pro nacteni sceny z klasickeho TXT
+        /// </summary>
+        /// <param name="inputFile">jmeno vstupniho souboru</param>
         public void loadSceneFromTXT(string inputFile)
         {
             scene.ClearScene();
@@ -95,10 +101,11 @@ namespace RayTracer
             FileWriter = new StreamWriter(scene.imageOutputFilePath);
         }
 
-        /*
-         * Metoda urcena pro nacteny sceny z XML souboru 
-         * Je vyuzivano tridy XmlDocument pro nacteni obsahu
-         */
+        /// <summary>
+        /// Metoda urcena pro nacteny sceny z XML souboru
+        /// Je vyuzivano tridy XmlDocument pro nacteni obsahu
+        /// </summary>
+        /// <param name="inputFile"></param>
         public void LoadSceneFromXML(string inputFile)
         {
            
@@ -170,13 +177,25 @@ namespace RayTracer
             }
             
         }
-        /*Metoda pro zpracovani elementu Light*/
+
+        /// <summary>
+        /// Metoda pro zpracovani elementu Light
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Xmldocument</param>
+        /// <returns></returns>
         private Light ProcessLightXML(XmlNode xmlNode, XmlDocument doc)
         {
             return new Light(ProcessSphereFromXML(xmlNode.SelectSingleNode("shape/sphere"), doc));
         }
-        
-        /*Metoda pro zpracovani elementu Shape z XML*/
+
+
+        /// <summary>
+        /// Metoda pro zpracovani elementu Shape z XML
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Document</param>
+        /// <returns>Shape nacteny z XML</returns>
         private Shape ProcessShapeXML(XmlNode xmlNode, XmlDocument doc)
         {
             
@@ -199,22 +218,14 @@ namespace RayTracer
            
             
         }
-        
-        /*Metoda pro zpracovani elementu Plane z XML*/
-        private Shape ProcessPlaneFromXML(XmlNode xmlNode, XmlDocument doc)
-        {
-            double distance;
-            Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
-
-            Material m = ProcessMaterialFromXML(xmlNode.SelectSingleNode("material"), doc);
-
-            distance = Double.Parse(xmlNode.SelectSingleNode("distance").InnerText.Trim());
 
 
-            return new Plane(m, v, distance);
-        }
-
-        /*Metoda pro zpracovani elementu Cuboid z XML*/
+        /// <summary>
+        /// Metoda pro zpracovani elementu Cuboid z XML
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Document</param>
+        /// <returns>Cuboid nacteny z XML</returns>
         private Shape ProcessCuboidFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double width, height, depth;
@@ -230,7 +241,12 @@ namespace RayTracer
             return new Cuboid(m, v, width, height,depth);
         }
 
-        /*Metoda pro zpracovani elementu Sphere z XML*/
+        /// <summary>
+        /// Metoda pro zpracovani elementu Sphere z XML
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Document</param>
+        /// <returns>Sphere nacteny z XML</returns>
         private Shape ProcessSphereFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double radius;
@@ -245,7 +261,12 @@ namespace RayTracer
             return new Sphere(m, v, radius);
         }
 
-        /*Metoda pro zpracovani elementu material z XML*/
+        /// <summary>
+        /// Metoda pro zpracovani elementu Material z XML
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Document</param>
+        /// <returns>Material nacteny z XML</returns>
         private Material ProcessMaterialFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
@@ -253,7 +274,12 @@ namespace RayTracer
             return new Material(v);
         }
 
-        /*Metoda pro zpracovani elementu Vector z XML*/
+        /// <summary>
+        /// Metoda pro zpracovani elementu Vector z XML
+        /// </summary>
+        /// <param name="xmlNode">xmlNode</param>
+        /// <param name="doc">Document</param>
+        /// <returns>Vector nacteny z XML</returns>
         private Vector ProcessVectorFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             XmlNode xNode = xmlNode.SelectSingleNode("x");
@@ -267,46 +293,7 @@ namespace RayTracer
             return new Vector(x, y, z);
         }
 
-        /*Metoda pro zpracovani svetel z TXT souboru*/
-
-        private void ReadLights(StreamReader file)
-        {
-            scene.Lights = new List<Light>();
-
-            int i = 0;
-
-            while(i <= (scene.lightCount - 1))
-            {
-                if (textReadLine(file).Contains("l"))
-                {
-                    if (textReadLine(file).Contains("s"))
-                    {
-                        Shape tmpShape = ProcessSphereBodyTXT(file);
-                        if(tmpShape != null)
-                        {
-                        scene.Lights.Add(new Light(tmpShape));
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                }
-                else
-                {
-                    break;
-                }
-                i++;
-            }
-        }
         
-        /* Metoda pro ulozeni sceny do XML soubour 
-         * K ukladani je vyuzita trida XmlDocument 
-         * Nejpvre jsou ulozene staticka data o scene 
-         * Nasledne je vyuzito implementovane metody GetInXML jednotlivych objektu
-         * pro ulozeni do XML
-         */
         public bool SaveSceneToXML()
         {
             if (scene?.Camera == null) return false;
@@ -365,10 +352,13 @@ namespace RayTracer
             
         }
 
-        /*
-         * Metoda slouzici pro ulozeni staticke inforamce sceny do XML
-         * Nejprve je pozadovano jmeno elementu, jeho obsah a nasledne instatnec XmlDocumentu
-         */
+        /// <summary>
+        /// Metoda slouzici pro ulozeni staticke inforamce sceny do XML
+        /// </summary>
+        /// <param name="elmName">XmlElement nazev</param>
+        /// <param name="text">Text pro ulozeni</param>
+        /// <param name="doc">XmlDocumtn</param>
+        /// <returns>true </returns>
         private XmlElement CreateXMLElem(String elmName, String text, XmlDocument doc)
         {
             XmlElement elem = doc.CreateElement(elmName);
@@ -378,128 +368,11 @@ namespace RayTracer
             return elem;
         }
 
-        private void ReadShepes(StreamReader file)
-        {
-            
-
-            int i = 0;
-            scene.Shapes = new List<Shape>();
-
-            while (i <= (scene.shapeCount-1)) 
-            {
-                string tmp = textReadLine(file);
-              
-                if (tmp.Contains("s"))
-                {
-                    scene.Shapes.Add(ProcessSphereBodyTXT(file));
-                }
-                else if (tmp.Contains("c"))
-                {
-                    scene.Shapes.Add(ProcessCuboidBodyTXT(file));
-                }
-                else if (tmp.Contains("p"))
-                {
-                     scene.Shapes.Add(ProcessPlaneBodyTXT(file));
-                }
-                else
-                {
-                    break;
-                }
-                              
-                i++;
-
-            }
-        }
-
-
-        public Shape ProcessPlaneBodyTXT(StreamReader file)
-        {
-
-            double x, y, z, r, g, b, dept;
-
-            r = TextReadNumber(file);
-            g = TextReadNumber(file);
-            b = TextReadNumber(file);
-
-            x = TextReadNumber(file);
-            y = TextReadNumber(file);
-            z = TextReadNumber(file);
-
-            dept = TextReadNumber(file);
-           
-
-            Plane tmpPlane = new Plane(new Material(new Vector(r, g, b)), new Vector(x, y, z), dept);
-            return tmpPlane;
-        }
-
-        public Shape ProcessCuboidBodyTXT(StreamReader file)
-        {
-
-            double x, y, z, r, g, b, width, height, dept;
-
-            r = TextReadNumber(file);
-            g = TextReadNumber(file);
-            b = TextReadNumber(file);
-
-            x = TextReadNumber(file);
-            y = TextReadNumber(file);
-            z = TextReadNumber(file);
-
-            width = TextReadNumber(file);
-            height = TextReadNumber(file);
-            dept = TextReadNumber(file);
-
-            Cuboid tmpCuboid = new Cuboid(new Material(new Vector(r, g, b)), new Vector(x, y, z), width, height, dept);
-            return tmpCuboid;
-        }
-
-        public Shape ProcessSphereBodyTXT(StreamReader file)
-        {
-
-            double x, y,z,r,g,b, radius;
-
-            r = TextReadNumber(file);
-            g = TextReadNumber(file);
-            b = TextReadNumber(file);
-
-            x = TextReadNumber(file);
-            y = TextReadNumber(file);
-            z = TextReadNumber(file);
-
-            radius = TextReadNumber(file);
-
-            Sphere tmpSphere = new Sphere(new Material(new Vector(r, g, b)), new Vector(x, y, z), radius);
-            return tmpSphere;
-        }
-
-        private double TextReadNumber(StreamReader file)
-        {
-            string output_string = "";
-            double output = 0;
-
-            output_string = textReadLine(file);
-           
-            if (output_string != null)
-            {
-                output = double.Parse(output_string);
-            }
-
-            return output;
-        }
-    
-        private string textReadLine(System.IO.StreamReader file)
-        {
-            string output = "";
-
-            if ((output = file.ReadLine()) != null)
-            {
-
-                return output;
-            }
-
-            return null;
-        }
-
+       /// <summary>
+       /// Metoda pro vygenerovani souboru s informacemi o jasu 
+       /// </summary>
+       /// <param name="y"></param>
+       /// <param name="color"></param>
         public void SaveImgToTXT(int y, int color)
         {
 

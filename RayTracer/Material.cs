@@ -7,12 +7,16 @@ using System.Xml;
 
 namespace RayTracer
 {
-    /*
-     * Trida predstavujici povrh daneho objektu 
-     */
+    
+    /// <summary>
+    /// Trida predstavujici povrh daneho objektu
+    /// </summary>
     public class Material
     {
-        /* Barva ulozena pomoci Tridy Vector */
+
+        /// <summary>
+        /// Barva ulozena pomoci Tridy Vector
+        /// </summary>
         public Vector Color { get; }
         
         public Material(Vector color)
@@ -25,9 +29,12 @@ namespace RayTracer
             return  Color.ToString() ;
         }
 
-        /*
-         *Metoda pro vypis inforamci o materialu objektu, ktery ho predstavuje do XML 
-         */
+        
+        /// <summary>
+        /// Metoda pro vypis inforamci o materialu objektu, ktery ho predstavuje do XML
+        /// </summary>
+        /// <param name="doc">XmlDocument doc</param>
+        /// <returns>XmlElement s informacemi o materialu</returns>
         internal XmlElement GetInXML(XmlDocument doc)
         {
             XmlElement materialElm = doc.CreateElement("material");

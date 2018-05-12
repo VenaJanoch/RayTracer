@@ -41,16 +41,21 @@ namespace RayTracer
             }
         }
 
-        /*
-         *Metoda pro vypocet kolize objektu s paprsekem 
-         *Vraci objekt Inteseciton s potrebnymi informacemi pro vykresleni barvy
-         *Pokud neni objek v kolizi vraci prazdnou instanci
-         */
+      
+         /// <summary>
+         /// Metoda pro vypocet kolize objektu s paprsekem
+         /// Vraci objekt Inteseciton s potrebnymi informacemi pro vykresleni barvy
+         /// Pokud neni objek v kolizi vraci prazdnou instanci
+         /// </summary>
+         /// <param name="ray">Paprsek Ray</param>
+         /// <returns>Inresction Objekt</returns>
         public abstract Intersection Intersect(Ray ray);
 
-        /*
-         *Metoda pro vypis inforamci o objektu do XML 
-         */
+        /// <summary>
+        /// Metoda pro vypis inforamci o objektu do XML 
+        /// </summary>
+        /// <param name="doc">Xml dokument</param>
+        /// <returns>XmlElement s infomace o objektu</returns>
         public abstract XmlElement GetInXML(XmlDocument doc);
 
 

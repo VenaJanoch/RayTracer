@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
-    /*
-     * Trida predstavujici scenu, ktera je nasledne vyrenderovana do PNG formatu
-     */ 
-   public class Scene
+
+    /// <summary>
+    /// Trida predstavujici scenu, ktera je nasledne vyrenderovana do PNG formatu
+    /// </summary>
+    public class Scene
     {
         
         public Camera Camera { get; set; }
@@ -39,13 +40,23 @@ namespace RayTracer
         public int lightCount { get; set; }
         public int lightSamples { get; set; }
         public int indirectLightSamples { get; set; }
-        public int maxDepth { get; set; }      
+        public int maxDepth { get; set; }
 
-        
-        /*
-         * Metoda slouzi k naplneni statickych informaci o scene 
-         * Spolu o poctu objektu a svetel pro automaticke vygenerovani objektu a svetel na scenu
-         */
+
+        /// <summary>
+        /// Metoda slouzi k naplneni statickych informaci o scene
+        /// Spolu o poctu objektu a svetel pro automaticke vygenerovani objektu a svetel na scenu
+        /// </summary>
+        /// <param name="outputFile">vystupni soubor</param>
+        /// <param name="imgFile">vystupni soubor obrazku</param>
+        /// <param name="width">sirka</param>
+        /// <param name="height">vyska</param>
+        /// <param name="superSamples">vzorky</param>
+        /// <param name="shapeCount">pocet objektu</param>
+        /// <param name="lightCount">pocet svetel</param>
+        /// <param name="lightSamples">pocet vzorku svetel</param>
+        /// <param name="indirectLightSamples">pocet neprimych svetel</param>
+        /// <param name="maxDepth">hloubka</param>
         public void FillScene(string sceneOutputFilePath, string imageOutputFilePath,
             int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples,
             int indirectLightSamples, int maxDepth)
@@ -67,9 +78,18 @@ namespace RayTracer
 
         }
 
-        /*
-         * Metoda slouzi k naplneni statickych informaci o scene 
-         */
+
+        /// <summary>
+        /// Metoda slouzi k naplneni statickych informaci o scene
+        /// </summary>
+        /// <param name="outputFile">vystupni soubor</param>
+        /// <param name="imgFile">vystupni soubor obrazku</param>
+        /// <param name="width">sirka</param>
+        /// <param name="height">vyska</param>
+        /// <param name="superSamples">vzorky</param>
+        /// <param name="lightSamples">pocet vzorku svetel</param>
+        /// <param name="indirectLightSamples">pocet neprimych svetel</param>
+        /// <param name="maxDepth">hloubka</param>
         public void  FillStaticInfo(string sceneOutputFilePath, string imageOutputFilePath,
             int screenWidth, int screenHeight, int superSamples, int lightSamples,
             int indirectLightSamples, int maxDepth)
@@ -85,9 +105,10 @@ namespace RayTracer
 
         }
 
-        /*
-         * Metoda slouzi k automatickemu vygenerovani svetel na scenu v pozadovanem poctu
-         */
+        /// <summary>
+        /// Metoda slouzi k automatickemu vygenerovani svetel na scenu v pozadovanem poctu
+        /// </summary>
+        /// <param name="random">Random generator cisel</param>
         private void CreateLights(Random random)
         {
             Lights = new List<Light>();
@@ -101,9 +122,11 @@ namespace RayTracer
             }
         }
 
-        /*
-         * Metoda slouzi k automatickemu vygenerovani objektu na scenu v pozadovanem poctu
-         */
+
+        /// <summary>
+        /// Metoda slouzi k automatickemu vygenerovani objektu na scenu v pozadovanem poctu
+        /// </summary>
+        /// <param name="random">Random generator cisel</param>
         private void CreateShapes(Random random)
         {
             Shapes = new List<Shape>();
@@ -148,6 +171,14 @@ namespace RayTracer
          * pro vzorkovani povrchu objektu.
          * Pripadne barva okli
          */
+         /// <summary>
+         /// Metada RayTrace slouci k vyberu nejblizsich objektu v okoli
+         /// Pokud je nejblizsi objekt svetlo je zavolana metoda PhongAt
+         /// ro vzorkovani povrchu objektu.
+         /// Pripadne barva okli
+         /// </summary>
+         /// <param name="ray">Paprsek Ray</param>
+         /// <returns>Bod umisteni</returns>
         public Vector RayTrace(Ray ray)
         {
             Intersection nearestShape = NearestShape(ray);
@@ -167,9 +198,11 @@ namespace RayTracer
             }
         }
 
-        /*
-         * Metoda BackgroundColor pro urceni barvy pozadi
-         */ 
+        /// <summary>
+        /// Metoda BackgroundColor pro urceni barvy pozadi/ 
+        /// </summary>
+        /// <param name="direction">Vector se smerem paprsku</param>
+        /// <returns>Vector s pozadim</returns>
         private Vector BackgroundColor(Vector direction)
         {
             Vector horizonColor = new Vector (0.60, 0.80, 1.0);
@@ -179,9 +212,12 @@ namespace RayTracer
             return horizonColor + ((zenithColor - horizonColor) * percent);
         }
 
-        /*
-         * Metoda pro vypocet okolniho procenta
-         */
+        /// <summary>
+        /// Metoda pro vypocet okolniho procenta
+        /// </summary>
+        /// <param name="point">Vector umisteni</param>
+        /// <param name="normal">Vector normal</param>
+        /// <returns></returns>
         private double AmbientPercent(Vector point, Vector normal)
         {
             int unoccludedRays = 0;
@@ -199,12 +235,18 @@ namespace RayTracer
             return ((double)unoccludedRays / lightSamples) * AmbientLight;
         }
 
-        /*
-         * Metoda PhongAt slouzi pro vypocet odrazu svetla z povrchu materialu
-         * Na zaklade predaneho objektu intersection a ray je spocitan odraz
-         * Objekt je vyvzorkovan dle zadaneho poctu vzorku do vstupniho formulare
-         * Dale je kontrolovan pocet pozadovanych zanoreni 
-         */
+
+
+
+        /// <summary>
+        ///  Metoda PhongAt slouzi pro vypocet odrazu svetla z povrchu materialu
+        ///  Na zaklade predaneho objektu intersection a ray je spocitan odraz
+        ///  Objekt je vyvzorkovan dle zadaneho poctu vzorku do vstupniho formulare
+        ///  Dale je kontrolovan pocet pozadovanych zanoreni
+        /// </summary>
+        /// <param name="intersection"></param>
+        /// <param name="ray"></param>
+        /// <returns>Vector s barvou </returns>
         private Vector PhongAt(Intersection intersection, Ray ray)
         {
             Vector viewVector = -ray.Direction;
@@ -287,9 +329,11 @@ namespace RayTracer
             return nearestHit;
         }
 
-        /*
-         * Metoda pro vypsani statickych informaci o scene
-         */ 
+
+        /// <summary>
+        /// Metoda pro vypsani statickych informaci o scene
+        /// </summary>
+        /// <returns></returns>
         public string GetInfo()
         {
             return sceneOutputFilePath + "\r\n" +
@@ -304,10 +348,9 @@ namespace RayTracer
                    maxDepth + "\r\n";
         }
 
-        /*
-         * Meotda pro smazani dat ze sceny
-         */ 
-
+        /// <summary>
+        /// Meotda pro smazani dat ze sceny
+        /// </summary>
         public void ClearScene()
         {
 

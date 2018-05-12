@@ -9,10 +9,11 @@ using System.Xml;
 
 namespace RayTracer
 {
-    /*
-     * Trida predstavuje objekt pro uchovani pohohy objektu pripadne ulozeni barvy objektu
-     * Obsahuje metody pro praci se souradnicemi tak i pro praci s barvami
-     */
+
+    /// <summary>
+    /// Trida predstavuje objekt pro uchovani pohohy objektu pripadne ulozeni barvy objektu
+    /// Obsahuje metody pro praci se souradnicemi tak i pro praci s barvami
+    /// </summary>
     public class Vector
     {
         public double X { get; set; }

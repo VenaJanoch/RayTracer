@@ -7,14 +7,10 @@ using System.Xml;
 
 namespace RayTracer
 {   
-    /**
-     * Trida predstavujici objekt Kvadru
-     **/
-   public class Cuboid : Shape
+    
+    public class Cuboid : Shape
     {
-        /*
-         * Properties tridy
-         */
+     
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
