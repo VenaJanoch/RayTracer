@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
-
+    /*
+     * Trida predstavujici scenu, ktera je nasledne vyrenderovana do PNG formatu
+     */ 
    public class Scene
     {
         
@@ -40,6 +42,10 @@ namespace RayTracer
         public int maxDepth { get; set; }      
 
         
+        /*
+         * Metoda slouzi k naplneni statickych informaci o scene 
+         * Spolu o poctu objektu a svetel pro automaticke vygenerovani objektu a svetel na scenu
+         */
         public void FillScene(string sceneOutputFilePath, string imageOutputFilePath,
             int screenWidth, int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples,
             int indirectLightSamples, int maxDepth)
@@ -58,9 +64,12 @@ namespace RayTracer
             CreateLights(random);
 
             IsLoad = true;
-            
+
         }
 
+        /*
+         * Metoda slouzi k naplneni statickych informaci o scene 
+         */
         public void  FillStaticInfo(string sceneOutputFilePath, string imageOutputFilePath,
             int screenWidth, int screenHeight, int superSamples, int lightSamples,
             int indirectLightSamples, int maxDepth)
@@ -76,6 +85,9 @@ namespace RayTracer
 
         }
 
+        /*
+         * Metoda slouzi k automatickemu vygenerovani svetel na scenu v pozadovanem poctu
+         */
         private void CreateLights(Random random)
         {
             Lights = new List<Light>();
@@ -89,6 +101,9 @@ namespace RayTracer
             }
         }
 
+        /*
+         * Metoda slouzi k automatickemu vygenerovani objektu na scenu v pozadovanem poctu
+         */
         private void CreateShapes(Random random)
         {
             Shapes = new List<Shape>();
@@ -127,6 +142,12 @@ namespace RayTracer
             }
         }
 
+        /*
+         * Metada RayTrace slouci k vyberu nejblizsich objektu v okoli
+         * Pokud je nejblizsi objekt svetlo je zavolana metoda PhongAt
+         * pro vzorkovani povrchu objektu.
+         * Pripadne barva okli
+         */
         public Vector RayTrace(Ray ray)
         {
             Intersection nearestShape = NearestShape(ray);
@@ -146,7 +167,9 @@ namespace RayTracer
             }
         }
 
-
+        /*
+         * Metoda BackgroundColor pro urceni barvy pozadi
+         */ 
         private Vector BackgroundColor(Vector direction)
         {
             Vector horizonColor = new Vector (0.60, 0.80, 1.0);
@@ -156,6 +179,9 @@ namespace RayTracer
             return horizonColor + ((zenithColor - horizonColor) * percent);
         }
 
+        /*
+         * Metoda pro vypocet okolniho procenta
+         */
         private double AmbientPercent(Vector point, Vector normal)
         {
             int unoccludedRays = 0;
@@ -173,6 +199,12 @@ namespace RayTracer
             return ((double)unoccludedRays / lightSamples) * AmbientLight;
         }
 
+        /*
+         * Metoda PhongAt slouzi pro vypocet odrazu svetla z povrchu materialu
+         * Na zaklade predaneho objektu intersection a ray je spocitan odraz
+         * Objekt je vyvzorkovan dle zadaneho poctu vzorku do vstupniho formulare
+         * Dale je kontrolovan pocet pozadovanych zanoreni 
+         */
         private Vector PhongAt(Intersection intersection, Ray ray)
         {
             Vector viewVector = -ray.Direction;
@@ -255,6 +287,9 @@ namespace RayTracer
             return nearestHit;
         }
 
+        /*
+         * Metoda pro vypsani statickych informaci o scene
+         */ 
         public string GetInfo()
         {
             return sceneOutputFilePath + "\r\n" +
@@ -268,6 +303,10 @@ namespace RayTracer
                    indirectLightSamples + "\r\n" +
                    maxDepth + "\r\n";
         }
+
+        /*
+         * Meotda pro smazani dat ze sceny
+         */ 
 
         public void ClearScene()
         {

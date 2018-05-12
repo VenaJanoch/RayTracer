@@ -31,6 +31,9 @@ namespace RayTracerGUI
 
         }
 
+        /*
+        * Metoda nastavi data do formulare
+        */
         public void SetDataToComponents()
         {
             if (light == 1)

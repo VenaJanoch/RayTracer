@@ -25,6 +25,9 @@ namespace RayTracerGUI.Controlers
             this.imageControler = imageControler;
         }
 
+        /*
+         * Metoda urcena pro kontrolu vstupu z fromulare pro random scenu
+         */
         public bool ControlRandomForm(String outputFile, String imgFile, String width, String height,
            String superSamples, String shapeCount, String lightCount, String lightSamples, String indirectLightSamples, String maxDepth)
         {
@@ -77,6 +80,9 @@ namespace RayTracerGUI.Controlers
             return true;  
         }
 
+        /*
+         * Metoda urcena pro kontrolu vstupu z fromulare pro vlastni scenu
+         */
         internal bool ControlOwnForm(String outputFile, String imgFile, String width, String height,
            String superSamples, String lightSamples, String indirectLightSamples, String maxDepth, bool isEdit)
         {
@@ -125,6 +131,7 @@ namespace RayTracerGUI.Controlers
             return true;
         }
 
+        /*Metoda pro kontrolu cisla ve formatu double*/
         public Double IsCorectDoubleNumberFormat(string fieldName, string value)
         {
             try
@@ -142,7 +149,7 @@ namespace RayTracerGUI.Controlers
 
         }
 
-
+        /*Metoda pro kontrolu cisla ve formatu int*/
         public int IsCorectIntNumberFormat(string fieldName, string value)
         {
             try
@@ -160,6 +167,7 @@ namespace RayTracerGUI.Controlers
 
         }
 
+        /*Metoda pro kontrolu, zda bylo vyplneno dane policko*/
         public bool IsCorectField(string fieldName, string field)
         {
             if ((field.Length == 0) || field.Contains(" "))
@@ -172,7 +180,11 @@ namespace RayTracerGUI.Controlers
             }
             return true;
         }
-        
+
+        /* 
+         * Metoda pro kontrolu, zda je int cislo ve spravnem intervalu
+         * Vraci true pokud je cislo ve spravnem intervalu
+         */
         public bool IsCorectIntNumber(String fieldName, int value, int min, int max)
         {
             if(value > max || value < min)
@@ -185,6 +197,11 @@ namespace RayTracerGUI.Controlers
             }
             return true;
         }
+
+        /* 
+         * Metoda pro kontrolu, zda je double cislo ve spravnem intervalu
+         * Vraci true pokud je cislo ve spravnem intervalu
+         */
 
         public bool IsCorectDoubleNumber(String fieldName, double value, double min, double max)
         {
@@ -199,6 +216,10 @@ namespace RayTracerGUI.Controlers
             return true;
         }
 
+        /* 
+         * Metoda pro nastaveni dat ziskanych z formulare, do sceny
+         */
+
         internal void InitScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth,
             int screenHeight, int superSamples, int shapeCount, int lightCount, int lightSamples, int indirectLightSamples, int maxDepth)
         {
@@ -210,6 +231,9 @@ namespace RayTracerGUI.Controlers
             Scene.Camera = Camera.LookAt(new Vector(6.0, 3.0, 12.0), new Vector(), aspect, 60.0);
         }
 
+        /*
+         * Metoda urcena pro kontrolu vstupu z fromulare editaci sceny
+         */
         internal void EditScene(string sceneOutputFilePath, string imageOutputFilePath, int screenWidth,
             int screenHeight, int superSamples,  int lightSamples, int indirectLightSamples, int maxDepth)
         {
@@ -218,6 +242,9 @@ namespace RayTracerGUI.Controlers
                             indirectLightSamples, maxDepth);
         }
 
+        /*
+         * Metoda urcena pro aktualizaci dat ve vybranem Kvadru
+         */
         internal bool UpdateCuboid(Cuboid cuboid, string coordX, string coordY,
             string coordZ, string width, string height, string depth, Color color)
         {
@@ -275,6 +302,9 @@ namespace RayTracerGUI.Controlers
             return true;
         }
 
+        /*
+         * Metoda urcena pro aktualizaci dat ve vybranem Kvadru
+         */
         internal bool UpdateCamera(string coordX, string coordY, string coordZ, string angle)
         {
             double aspect = (Scene.screenWidth / Scene.screenHeight);
@@ -309,6 +339,9 @@ namespace RayTracerGUI.Controlers
             return true;
         }
 
+        /*
+         * Metoda urcena pro aktualizaci dat ve vybranem Kuzelu
+         */
         internal bool UpdateSphere(Sphere sphere, string coordX, string coordY,
             string coordZ, string radius, Color color)
         {

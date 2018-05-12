@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
+    /*
+     * Trida predstavujici paprsek vychazejici z kamery
+     */
    public class Ray
     {
         public Vector Point { get; }

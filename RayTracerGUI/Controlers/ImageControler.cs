@@ -12,6 +12,10 @@ using System.Windows.Forms;
 
 namespace RayTracerGUI.Controlers    
 {
+    /*
+     * Trida slouzici jako controler funkcnosti ohledne renderovani obrazku 
+     * a vytvareni 2D nahledu
+     */
     
     public class ImageControler
     {
@@ -36,6 +40,10 @@ namespace RayTracerGUI.Controlers
 
         }
 
+        /*
+         * Metoda urcena pro nastaveni hodnot pred zacatkem renderovani.
+         * A spusteni vlakna pro samotne renderovani
+         */ 
         public void RenderImage(double x, double y)
         {
             Scene.Camera.eye.X = x;
@@ -50,7 +58,12 @@ namespace RayTracerGUI.Controlers
               
         }
 
-
+        /*
+         * Kontrolni metoda pro zjisteni zda uz existuje vyrenderovany obrazek,
+         * pro ukazku na platen.
+         * 
+         * return true pokud obrazek existuje
+         */ 
         internal bool IsAvailableImage()
         {
             if (File.Exists(Scene.imageOutputFilePath))
@@ -65,6 +78,10 @@ namespace RayTracerGUI.Controlers
             return false;
         }
 
+        /*
+         * Metoda pro zavolani metody ze tridi FileManipulator pro nacteni sceny z XML
+         * a nastavi scenu jako nactenou.
+         */ 
         internal void LoadSceneFromFile(string fileName)
         {
             
@@ -72,6 +89,10 @@ namespace RayTracerGUI.Controlers
             Scene.IsLoad= true;
         }
 
+        /*
+         * Metoda kontroluje zda je prave renderovany obrazek.
+         * Pokud ano zavola metodu pro ukonceni renderovani ze tridy RenderManager
+         */ 
         internal void StopRenderingImage()
         {
             if (RenderManager.Rendering)
@@ -87,11 +108,18 @@ namespace RayTracerGUI.Controlers
             }
         }
 
+        /*
+         * Metoda pro prekresleni platna v uvodnim okne
+         */
         internal void RepaintCanvas()
         {
             InitWindow.RepaintCanvas();
         }
 
+
+        /*
+         * Kontrolni metoda pro pridani Kvadru na kreslici platno
+         */ 
         internal bool AddCuboidToSceneControl()
         {
             if(Scene.Shapes != null)
@@ -104,6 +132,9 @@ namespace RayTracerGUI.Controlers
             return false;
         }
 
+        /*
+         * Kontrolni metoda pro pridani Kuzelu na kreslici platno
+         */
         internal bool AddSphereToSceneControl()
         {
             if (Scene.Shapes != null)
@@ -116,6 +147,9 @@ namespace RayTracerGUI.Controlers
             return false;
         }
 
+        /*
+         * Kontrolni metoda pro pridani svetla na kreslici platno
+         */
         internal bool AddLightToSceneControl()
         {
             if (Scene.Shapes != null)
@@ -131,6 +165,9 @@ namespace RayTracerGUI.Controlers
 
         }
 
+        /*
+         * Kontrolni metoda pro ulozeni sceny do XML
+         */
         internal bool SaveSceneControl()
         {
             if (FileManipulator == null || Scene == null) return false;
@@ -139,6 +176,9 @@ namespace RayTracerGUI.Controlers
 
         }
 
+        /*
+         * Kontrolni metoda pro zjisteni zda je jiz scena nactena 
+         */
         internal bool IsLoadScene()
         {
             if (!Scene.IsLoad)

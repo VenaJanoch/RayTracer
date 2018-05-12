@@ -9,6 +9,7 @@ using System.Xml;
 
 namespace RayTracer
 {
+    /* Trida urcena pro praci s XML a TXT soubory. */
 
 
     public class FileManipulator
@@ -21,6 +22,10 @@ namespace RayTracer
             this.scene = scene;
         }
 
+        /*
+         * Metoda urcena pro ulozeni sceny do klasickeho TXT 
+         * Je vyuzivano prepsanych ToString u jednotlivych objektu a statickych dat o scene
+         */
         public void SaveSceneToTXT()
         {
             string outputText = scene.GetInfo();
@@ -50,6 +55,9 @@ namespace RayTracer
            
         }
 
+        /*
+         * Metoda urcena pro nacteni sceny z klasickeho TXT 
+         */
         public void loadSceneFromTXT(string inputFile)
         {
             scene.ClearScene();
@@ -87,6 +95,10 @@ namespace RayTracer
             FileWriter = new StreamWriter(scene.imageOutputFilePath);
         }
 
+        /*
+         * Metoda urcena pro nacteny sceny z XML souboru 
+         * Je vyuzivano tridy XmlDocument pro nacteni obsahu
+         */
         public void LoadSceneFromXML(string inputFile)
         {
            
@@ -158,12 +170,13 @@ namespace RayTracer
             }
             
         }
-
+        /*Metoda pro zpracovani elementu Light*/
         private Light ProcessLightXML(XmlNode xmlNode, XmlDocument doc)
         {
             return new Light(ProcessSphereFromXML(xmlNode.SelectSingleNode("shape/sphere"), doc));
         }
-
+        
+        /*Metoda pro zpracovani elementu Shape z XML*/
         private Shape ProcessShapeXML(XmlNode xmlNode, XmlDocument doc)
         {
             
@@ -186,7 +199,8 @@ namespace RayTracer
            
             
         }
-
+        
+        /*Metoda pro zpracovani elementu Plane z XML*/
         private Shape ProcessPlaneFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double distance;
@@ -200,6 +214,7 @@ namespace RayTracer
             return new Plane(m, v, distance);
         }
 
+        /*Metoda pro zpracovani elementu Cuboid z XML*/
         private Shape ProcessCuboidFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double width, height, depth;
@@ -215,6 +230,7 @@ namespace RayTracer
             return new Cuboid(m, v, width, height,depth);
         }
 
+        /*Metoda pro zpracovani elementu Sphere z XML*/
         private Shape ProcessSphereFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             double radius;
@@ -229,6 +245,7 @@ namespace RayTracer
             return new Sphere(m, v, radius);
         }
 
+        /*Metoda pro zpracovani elementu material z XML*/
         private Material ProcessMaterialFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             Vector v = ProcessVectorFromXML(xmlNode.SelectSingleNode("vector"), doc);
@@ -236,6 +253,7 @@ namespace RayTracer
             return new Material(v);
         }
 
+        /*Metoda pro zpracovani elementu Vector z XML*/
         private Vector ProcessVectorFromXML(XmlNode xmlNode, XmlDocument doc)
         {
             XmlNode xNode = xmlNode.SelectSingleNode("x");
@@ -248,6 +266,8 @@ namespace RayTracer
 
             return new Vector(x, y, z);
         }
+
+        /*Metoda pro zpracovani svetel z TXT souboru*/
 
         private void ReadLights(StreamReader file)
         {
@@ -280,7 +300,13 @@ namespace RayTracer
                 i++;
             }
         }
-
+        
+        /* Metoda pro ulozeni sceny do XML soubour 
+         * K ukladani je vyuzita trida XmlDocument 
+         * Nejpvre jsou ulozene staticka data o scene 
+         * Nasledne je vyuzito implementovane metody GetInXML jednotlivych objektu
+         * pro ulozeni do XML
+         */
         public bool SaveSceneToXML()
         {
             if (scene?.Camera == null) return false;
@@ -339,7 +365,10 @@ namespace RayTracer
             
         }
 
-
+        /*
+         * Metoda slouzici pro ulozeni staticke inforamce sceny do XML
+         * Nejprve je pozadovano jmeno elementu, jeho obsah a nasledne instatnec XmlDocumentu
+         */
         private XmlElement CreateXMLElem(String elmName, String text, XmlDocument doc)
         {
             XmlElement elem = doc.CreateElement(elmName);

@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 using System.Xml;
 
 namespace RayTracer
-{
+{   
+    /**
+     * Trida predstavujici objekt Kvadru
+     **/
    public class Cuboid : Shape
     {
-
+        /*
+         * Properties tridy
+         */
         public double Width { get; set; }
         public double Height { get; set; }
         public double Depth { get; set; }
@@ -22,7 +27,7 @@ namespace RayTracer
             this.Height = height;
             this.Depth = depth;
         }
-
+        
         public override Vector RandomPoint
         {
             get
@@ -32,6 +37,7 @@ namespace RayTracer
             }
         }
 
+        
         public override Intersection Intersect(Ray ray)
         {
             double nMinX, nMinY, nMinZ, nMaxX, nMaxY, nMaxZ;

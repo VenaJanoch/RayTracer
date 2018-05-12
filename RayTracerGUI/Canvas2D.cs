@@ -10,6 +10,10 @@ using System.Windows.Forms;
 
 namespace RayTracerGUI
 {
+    /*
+     * Trida predstavuje modelovaci platno pro 2D nahled 
+     * Umoznuje zobrazit objekty, posouvat jimy, pripadne vyvolat okno pro jejich editaci
+     */
     public class Canvas2D : Control
     {
         public ImageControler ImageControler { get; set; }

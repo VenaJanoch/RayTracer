@@ -68,8 +68,6 @@ namespace RayTracerGUI
 
         }
 
-       
-
         private void DisableScene()
         {
             cuboidBT.Enabled = false;
@@ -199,8 +197,6 @@ namespace RayTracerGUI
                 ShowErrorMessage(message, caption);
             } 
         }
-
-        
 
         private void D3ViewBT_Click(object sender, EventArgs e)
         {

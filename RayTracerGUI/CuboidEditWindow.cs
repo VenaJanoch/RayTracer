@@ -28,6 +28,9 @@ namespace RayTracerGUI
             SetDataToComponents();
         }
 
+        /*
+         * Metoda nastavi data do formulare
+         */
         public void SetDataToComponents()
         {
             CoordXTB.Text = cuboid.Point.X.ToString();
@@ -52,6 +55,7 @@ namespace RayTracerGUI
                 MaterialBT.BackColor = colorDialog1.Color;
             }
         }
+
 
         private void SaveBTEdit_Click(object sender, EventArgs e)
         {

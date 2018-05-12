@@ -7,6 +7,10 @@ using System.Xml;
 
 namespace RayTracer
 {
+    /*
+     * Trida predsavujici svetelny prvek
+     * Svetlo je tvoreno pomoci objektu Shape konkretne Sphere
+     */ 
     public class Light
     {
 
@@ -24,6 +28,9 @@ namespace RayTracer
             return "l\r\n" + shape.ToString() ;
         }
 
+        /*
+         *Metoda pro vypis inforamci o svetlu a objektu, ktery ho predstavuje do XML 
+         */
         internal XmlNode GetInXML(XmlDocument doc)
         {
             XmlElement lightElem = doc.CreateElement("light");

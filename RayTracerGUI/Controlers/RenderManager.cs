@@ -5,6 +5,10 @@ using System.Drawing.Imaging;
 using RayTracerGUI.Controlers;
 
 namespace RayTracer
+
+    /*
+     * Trida slouzi k renderovani namodelovaneho obrazku 
+     */ 
 {
     public class RenderManager
     {
@@ -22,7 +26,11 @@ namespace RayTracer
             this.imageControler = imageControler;
         }
 
-
+        /*
+         * Metoda urcena pro spusteni vlakna s vypoctem jednotlivych pixelu
+         * Jednotlive radky pixelu jsou rozdeleny do vlaken pomoci Parallel a 
+         * nasledne spuctena jejich hodnota
+         */
         public void RenderingPicture()
         {
             Rendering = true;

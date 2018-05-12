@@ -26,6 +26,10 @@ namespace RayTracerGUI
             SetDataToComponents();
         }
 
+
+        /*
+         * Metoda nastavi data do formulare
+         */
         public void SetDataToComponents()
         {
             CoordXTB.Text = imageControler.Scene.Camera.eye.X.ToString();
@@ -36,8 +40,10 @@ namespace RayTracerGUI
          
         }
 
-        
-    
+
+        /*
+         * Metoda zavola controler, zda je formular v poradku a nasledne zavre okno 
+         */
         private void SaveBTEdit_Click(object sender, EventArgs e)
         {
             if(inputFormControler.UpdateCamera(CoordXTB.Text, CoordYTB.Text, CoordZTB.Text, AngleTB.Text))

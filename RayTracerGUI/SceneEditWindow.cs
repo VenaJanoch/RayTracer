@@ -30,6 +30,9 @@ namespace RayTracerGUI
             SetDataToComponets();
         }
 
+        /*
+        * Metoda nastavi data do formulare
+        */
         private void SetDataToComponets()
         {
             sceneOutput.Text = ImageControler.Scene.sceneOutputFilePath;

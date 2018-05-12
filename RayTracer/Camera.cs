@@ -9,6 +9,7 @@ namespace RayTracer
 {
    public class Camera
     {
+        /** Globalni promenne tridy */
         public Vector eye { get; }
         public Vector forward { get; }
         public Vector right { get; }
@@ -27,6 +28,15 @@ namespace RayTracer
             this.FovY = fovY;
         }
 
+        /**
+         * Metoda LookAt
+         * Umoznuje nastaveni kamery na zadanou polohu a uhel pohledu
+         * 
+         * Vector eye - umisteni kamery
+         * Vector focus - bod lomu cocky
+         * double aspect 
+         * double fovY - uhel pohledu
+         **/
         public static Camera LookAt(Vector eye, Vector focus, double aspect, double fovY)
         {
             
@@ -39,6 +49,10 @@ namespace RayTracer
             return new Camera(eye, forward, right, up, fovY);
         }
 
+        /**
+         *Metoda ImageRay
+         * Tato metoda vraci instanci paprsku Ray vypoctenou z danych bodu
+         **/
         
         public Ray ImageRay(double xx, double yy)
         {

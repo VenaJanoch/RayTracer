@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RayTracer
 {
+    /*
+     * Trida uchovavajici inforamce o kolizi paprsku s objektem
+     */
    public class Intersection
     {
         public double T { get; }
@@ -22,7 +25,9 @@ namespace RayTracer
             Normal = null;
             Material = null;
         }
-
+        /*
+         * Metoda urcena pro nastaveni dat o kolizi do tridy
+         */
         public Intersection(double t, Vector point, Vector normal, Material material)
         {
             T = t;
